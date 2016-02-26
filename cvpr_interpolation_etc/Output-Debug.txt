@@ -1,0 +1,67 @@
+﻿'cvpr_interpolation_etc.exe': Loaded 'E:\Works\Bitbucket\cvpr_interpolationetc\cvpr_interpolation_etc\Debug\cvpr_interpolation_etc.exe', Symbols loaded.
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\ntdll.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\kernel32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\KernelBase.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'D:\Program Files (x86)\opencv2.4.10\opencv\build\x86\vc10\bin\opencv_core2410d.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'D:\Program Files (x86)\opencv2.4.10\opencv\build\x86\vc10\bin\opencv_imgproc2410d.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'D:\Program Files (x86)\opencv2.4.10\opencv\build\x86\vc10\bin\opencv_highgui2410d.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\msvcp100d.dll', Symbols loaded.
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\msvcr100d.dll', Symbols loaded.
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\user32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\gdi32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\ole32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\combase.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\msvcrt.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\rpcrt4.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\sspicli.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\cryptbase.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\bcryptprimitives.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\sechost.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\oleaut32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\advapi32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.10240.16384_none_49c02355cf03478c\comctl32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\msvfw32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\avifil32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\avicap32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\shell32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\msacm32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\windows.storage.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\winmm.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\shlwapi.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\winmmbase.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\kernel.appcore.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\cfgmgr32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\SHCore.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\powrprof.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\profapi.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\devobj.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\imm32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\msctf.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\nvinit.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\version.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Program Files (x86)\NVIDIA Corporation\coprocmanager\detoured.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Program Files (x86)\NVIDIA Corporation\coprocmanager\nvd3d9wrap.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\setupapi.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Program Files (x86)\NVIDIA Corporation\coprocmanager\nvdxgiwrap.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\uxtheme.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\dwmapi.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\clbcatq.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\SogouTSF.ime', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\msimg32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\ntmarta.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\SogouPY.ime', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\ws2_32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\nsi.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\oleacc.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'D:\Program Files (x86)\SogouInput\Components\SgAppender\1.0.0.207\SgAppender_Dll.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'D:\Program Files (x86)\SogouInput\7.7.0.7006\Resource.dll', Binary was not built with debug information.
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\psapi.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'D:\Program Files (x86)\SogouInput\Components\PicFace\1.0.0.1390\PicFace.dll', Cannot find or open the PDB file
+The thread 'Win32 Thread' (0x1118) has exited with code 0 (0x0).
+'cvpr_interpolation_etc.exe': Loaded 'C:\Users\DecaYale\AppData\Roaming\TaobaoProtect\TaobaoProtectSE.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\crypt32.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\msasn1.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\sfc.dll', Cannot find or open the PDB file
+'cvpr_interpolation_etc.exe': Loaded 'C:\Windows\SysWOW64\sfc_os.dll', Cannot find or open the PDB file
+The thread 'Win32 Thread' (0x1d14) has exited with code 0 (0x0).
+The program '[9104] cvpr_interpolation_etc.exe: Native' has exited with code 0 (0x0).

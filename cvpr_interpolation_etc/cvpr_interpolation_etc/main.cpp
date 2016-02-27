@@ -27,11 +27,11 @@ clock_t timer;
 //boxFilterDepthRefine 由在稠密深度FilterMat附近使用双目图像求精，得到求精后的深度结果fineDepthMap（结果不一定是正确的），isValidMap 中值为1的部分表示对应位置fineDepthMap较为可靠，0的位置舍弃。
 int main()
 {
-	const cv::Mat imgL = cv::imread ("./data/scene1.row3.col3.ppm", 0);//("./data2/view1_half.png", 0);//("./data/scene1.row3.col3.ppm", 0); //Load as grayscale
-	const cv::Mat imgR = cv::imread ("./data/scene1.row3.col4.ppm", 0);
+	const cv::Mat imgL = cv::imread ("./data/scene1.row3.col3.ppm", 0);//("./data/scene1.row3.col3.ppm", 0);//("./data2/view1_half.png", 0);//("./data/scene1.row3.col3.ppm", 0); //Load as grayscale
+	const cv::Mat imgR = cv::imread ("./data/scene1.row3.col4.ppm", 0);//("./data/scene1.row3.col4.ppm", 0);
 
-	cv::Mat dispTrue = cv::imread ("./data/truedisp.row3.col3.pgm", 0);//("./data2/disp1_half.png", 0);//("./data/truedisp.row3.col3.pgm", 0);
-	dispTrue = dispTrue/15;//处理后dispTrue是真是的深度数据
+	cv::Mat dispTrue = cv::imread ("./data/truedisp.row3.col3.pgm", 0);//("./data/truedisp.row3.col3.pgm", 0);//("./data2/disp1_half.png", 0);//("./data/truedisp.row3.col3.pgm", 0);
+	dispTrue = dispTrue/15;///15;//处理后dispTrue是真是的深度数据
 
 //sift 获得特征点并在相应深度图上采样获得disp_coarse
 	cv::SiftFeatureDetector detector;
@@ -79,7 +79,7 @@ Mat subtractImg(imgL.size(),CV_64FC1,Scalar(0));
 		for(int j=0;j<fineDepthMap.cols;j++)
 			subtractImg.at<double>(i,j) = (isValidMap.at<uchar>(i,j)==1 ? fineDepthMap.at<double>(i,j):0);
 
-	imshow("0",dispTrue*255/15);
+	imshow("0",dispTrue);//*255/15
 	imshow("1",imgL);
 	imshow("2",imgR);
 	imshow("3",fineDepthMap/15);

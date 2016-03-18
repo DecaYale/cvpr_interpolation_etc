@@ -152,12 +152,14 @@
     <ClCompile Include="AdditionalFuncs.cpp" />
     <ClCompile Include="BilateralFilter.cpp" />
     <ClCompile Include="boxFilterDepthRefine.cpp" />
+    <ClCompile Include="FeatureMatching.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdditionalFuncs.h" />
     <ClInclude Include="Bilateral Filter.h" />
     <ClInclude Include="boxFilterDepthRefine.h" />
+    <ClInclude Include="FeatureMatching.h" />
     <ClInclude Include="StereoMatcher.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

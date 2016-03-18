@@ -15,12 +15,25 @@
 
 //#include "DBP.h"
 #include "boxFilterDepthRefine.h"
+#include "FeatureMatching.h"
 using namespace std;
 using namespace cv;
 
 clock_t timer;
 
+
 #if 1
+int main()
+{
+	const cv::Mat imgL = cv::imread ("./data/scene1.row3.col3.ppm", 0);//("./data/scene1.row3.col3.ppm", 0);//("./data2/view1_half.png", 0);//("./data/scene1.row3.col3.ppm", 0); //Load as grayscale
+	const cv::Mat imgR = cv::imread ("./data/scene1.row3.col4.ppm", 0);//("./data/scene1.row3.col4.ppm", 0);
+	double xDiffThresh = 40;
+	int winSize = 5;
+	sparseDisparity(imgL,imgR, xDiffThresh, winSize);
+
+}
+
+#elif 1
 //说明：
 //主要是两个函数：深度插值函数:FastBFilterDepthInterp(...)和深度求精函数boxFilterDepthRefine（...）
 //FastBFilterDepthInterp由稀疏深度图disp_coarse（无效处初始化为0）得到插值后的稠密深度FilterMat

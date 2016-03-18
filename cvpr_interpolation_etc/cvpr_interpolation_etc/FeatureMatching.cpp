@@ -142,7 +142,7 @@ void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> 
 				dist[l][r] = matchCost(imgL, imgR,xl,y,xr,y,winSize);
 			}
 		}
-		if (y==98)
+		/*if (y==98)
 		{
 			for(int l=0;l<Nl;l++)
 			{
@@ -150,7 +150,7 @@ void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> 
 					printf("%.2f" ,dist[l][r]);
 				printf("\n");
 			}
-		}
+		}*/
 		//每行特征点 matching 
 		vector<vector<int> > lrMinList(Nl); //Nl x 2 ，第i行第一个元素对应 距离图像第y行 第i个元素最近的右图像的像素索引
 		vector<vector<int> > rlMinList(Nr);
@@ -237,7 +237,7 @@ void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> 
 			//if (lLover == -1 || rLover ==-1) continue;
 
 
-			if(lLover == rLover ) //	&& dist[l][lLover] < 11
+			if(l == rLover ) //	&& dist[l][lLover] < 11
 			{
 				tmp.push_back(listL[y][l] );
 				tmp.push_back(y);

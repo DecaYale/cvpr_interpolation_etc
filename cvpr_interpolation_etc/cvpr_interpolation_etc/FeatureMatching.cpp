@@ -80,6 +80,7 @@ void featureMatching(const Mat & imgL,const Mat & imgR,vector<vector<int> > list
 		int Nl = listL[y].size();
 		int Nr = listR[y].size();
 		
+		// 检查dist大小
 		if (dist.size()<Nl)
 		{
 			dist.resize(2*Nl);
@@ -109,7 +110,70 @@ void featureMatching(const Mat & imgL,const Mat & imgR,vector<vector<int> > list
 			}
 		}
 
-		//matching 
+		//每行特征点 matching 
+		vector<vector<int> > lrMinList(Nl);
+		vector<vector<int> > rlMinList(Nr);
+
+		for(int l=0; l<Nl; l++)
+		{
+			double minV = 1e10;
+			double min2V = 1e10;
+			int minIdx;
+			int min2Idx;
+			for(int r=0; r<Nr; r++)
+			{
+				//找到对应每个l的最小的两个对应的r
+				double dist_lr = dist[l][r];
+				if ( dist_lr < minV ) 
+				{
+					minIdx = r;
+					minV = dist_lr;
+				}
+				else if (dist_lr < min2V) 
+				{
+					min2Idx = r;
+					min2V = dist_lr;
+				}
+				
+			}
+			lrMinList[l].push_back(minIdx);
+			lrMinList[l].push_back(min2Idx);
+
+		}
+
+		for(int r=0; r<Nr; r++)
+		{
+			double minV = 1e10;
+			double min2V = 1e10;
+			int minIdx;
+			int min2Idx;
+			for(int l=0; l<Nl; l++)
+			{
+				//找到对应每个l的最小的两个对应的r
+				double dist_rl = dist[r][l];
+				if ( dist_rl < minV ) 
+				{
+					minIdx = l;
+					minV = dist_rl;
+				}
+				else if (dist_rl < min2V) 
+				{
+					min2Idx = l;
+					min2V = dist_rl;
+				}
+
+			}
+			rlMinList[r].push_back(minIdx);
+			rlMinList[r].push_back(min2Idx);
+
+		}
+		//交叉验证 + peak ratio?
+		for(int l=0; l<Nl; l++)
+		{
+			double lLover = lrMinList[l][0];
+			double rLover = rlMinList[lLover][0];
+			if(lLover == rLover) 
+		}
 
 
 	}

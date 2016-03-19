@@ -77,7 +77,7 @@ double matchCost(const Mat & imgL, const Mat & imgR,int xl,int yl,int xr,int yr,
 	cost /= (winSize * winSize);
 	return cost;
 }
-void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> > & listL,const vector<vector<int> > & listR,vector <vector<int> > & pair,int winSize)
+void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> > & listL,const vector<vector<int> > & listR,vector <vector<int> > & pair,double costThresh,int winSize)
 {
 	int H = imgL.rows;
 	int W = imgL.cols;
@@ -237,7 +237,7 @@ void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> 
 			//if (lLover == -1 || rLover ==-1) continue;
 
 
-			if(l == rLover ) //	&& dist[l][lLover] < 11
+			if(l == rLover && dist[l][lLover]< costThresh) //	&& dist[l][lLover] < 11
 			{
 				tmp.push_back(listL[y][l] );
 				tmp.push_back(y);
@@ -253,7 +253,7 @@ void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> 
 	
 
 }
-void sparseDisparity(const Mat & imgL,const Mat & imgR,double xDiffThresh, int winSize)
+void sparseDisparity(const Mat & imgL,const Mat & imgR, Mat & sparseDisp, double xDiffThresh, double costThresh,int winSize)
 {
 	Mat imgLGradient(imgL.size(),CV_64FC1,Scalar(0));
 	Mat imgRGradient(imgR.size(),CV_64FC1,Scalar(0));
@@ -272,8 +272,22 @@ void sparseDisparity(const Mat & imgL,const Mat & imgR,double xDiffThresh, int w
 	
 	vector <vector<int> > pair;
 
-	featureMatching(imgL,imgR,listL, listR, pair, winSize);
+	featureMatching(imgL,imgR,listL, listR, pair, costThresh, winSize);
 
+	if (sparseDisp.size != imgL.size) sparseDisp.create(imgL.size(),CV_32SC1);
+	int H = sparseDisp.rows;
+	int W = sparseDisp.cols;
+	for(int i=0; i<pair.size(); i++)
+	{
+		int y = pair[i][1];
+		int x = pair[i][0];
+		int disp = pair[i][0] - pair[i][2];
+
+		sparseDisp.at<double>(y,x) =  disp>0 ? disp:0;
+	}
+
+
+	//for test
 	FILE * fp = fopen("pair.txt","w+");
 	for(int i=0;i<pair.size();i++)
 	{

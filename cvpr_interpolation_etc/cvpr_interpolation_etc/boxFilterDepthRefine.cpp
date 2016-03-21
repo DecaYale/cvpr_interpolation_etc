@@ -74,12 +74,14 @@ void offsetGenerate2(cv::Mat& dispMap, cv::Mat & offsetImg, int deviation)
 //
 //////////////////////////////////////////////////////////////////////////
 
-void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &coarseDepthMap, cv::Mat &fineDepthMap,cv:: Mat & isValid, int dLevels ,int winWidth,int deviation,double validThreshold,double curvThreshold,double peakRatio)
+void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &coarseDepthMap, const vector<bool> & dispSample, cv::Mat &fineDepthMap,cv:: Mat & isValid, int dLevels ,int winWidth,int deviation,double validThreshold,double curvThreshold,double peakRatio)
 {
 	int height = img_L.rows;
 	int width = img_L.cols;
 	int patchArea=winWidth*winWidth;//int patchSize=winWidth*winWidth;
 	int *size = new int[3];
+
+	dLevels = dispSample.size();//+1+1;//dlevels 是图像中最大的disparity valued
 	size[0] = dLevels; size[1] = height; size[2] = width;
 	double val = 1E5;	//大了会出问题，why？
 	cv::Mat * dataCostCube = new Mat(3,size,CV_64FC1,Scalar(val) );
@@ -128,6 +130,8 @@ void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &c
 	Mat * costMap_d = new Mat(img_L.size(),CV_64FC1,Scalar(0));
 	for(int d=0; d<dLevels; d++)
 	{
+		if ( !dispSample.at(d) ) continue;///
+
 		double * costMap_d = (double*)(dataCostCube->data + d*( dataCostCube->step[0]) );
 		integralImgCal(costMap_d, height,width,dataCostCube->step[1]);
 	}
@@ -136,6 +140,8 @@ void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &c
 	//计算winCostCube
 	for(int d=0; d<dLevels; d++)
 	{
+		if (! dispSample.at(d)) continue;///
+
 		for(int i=0;i<height; i++)
 		{
 			for(int j=0; j<width; j++)
@@ -168,7 +174,7 @@ void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &c
 
 			for(int d=0; d<dLevels; d++)
 			{
-				
+				if (! dispSample[d]) continue;///
 				
 				double cost_t = winCostCube->at<double>(d,i,j);//double cost_t = dataCostCube->at<double>(d,i,j);//
 

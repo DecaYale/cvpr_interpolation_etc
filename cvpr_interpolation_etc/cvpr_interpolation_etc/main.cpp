@@ -35,7 +35,7 @@ int main()
 	char dirDispS[100];
 	char dirDispD[100];
 
-for(int i=1;i<22;i++)
+for(int i=1;i<2;i++)
 {
 	sprintf(dirL,"%s%d%s",root,i,"/view1.png");
 	sprintf(dirR,"%s%d%s",root,i,"/view5.png");
@@ -57,6 +57,8 @@ for(int i=1;i<22;i++)
 	Mat sparseDisp(imgL.size(),CV_64FC1,Scalar(0));
 
 	sparseDisparity(imgL,imgR,sparseDisp, xDiffThresh,costThresh, peakRatio, winSize);
+
+	
 
 
 
@@ -80,9 +82,40 @@ for(int i=1;i<22;i++)
 	double validThreshold = 10;
 	double curvThreshold = -1.5;
 	double peakRatioS = 1.2;
+
+	//for temporary test
+	//double M=0,m=1e10;
+	//for(int i=0; i<sparseDisp.rows; i++)
+	//{
+	//	for(int j=0; j<sparseDisp.cols; j++)
+	//	{
+	//		if (sparseDisp.at<double>(i,j)> M) M = sparseDisp.at<double>(i,j);
+	//		if (sparseDisp.at<double>(i,j)!=0 && sparseDisp.at<double>(i,j)<m ) m = sparseDisp.at<double>(i,j);
+	//	}
+	//}
+	//vector<bool> isSampled(M+deviation+1);
+	//vector<int > dispN(M+deviation+1);
+	//for(int i = m;i<=M+deviation;i++) isSampled[i] = 1;
+	//for(int i=0; i<sparseDisp.rows; i++)
+	//{
+	//	for(int j=0; j<sparseDisp.cols; j++)
+	//	{
+	//		 int disp = sparseDisp.at<double>(i,j);
+	//		 if (disp!=0) isSampled[disp] = 1;
+	//		//dispN[disp] ++;
+	//	}
+	//}
+	vector<bool> isSampled(100);
+	for(int i=0; i<isSampled.size();i++) 
+	{
+		if (i>30 && i<80 )
+			isSampled[i] = 1;
+		else
+			isSampled[i] =0;
+	}
 	timer = clock();
 	//深度求精函数
-	boxFilterDepthRefine( imgL, imgR, FilterMat, fineDepthMap,isValidMap, dLevels ,winWidth,deviation,validThreshold,curvThreshold,peakRatioS);
+	boxFilterDepthRefine( imgL, imgR, FilterMat, isSampled, fineDepthMap,isValidMap, dLevels ,winWidth,deviation,validThreshold,curvThreshold,peakRatioS);
 	cout<<clock()-timer<<endl;
 
 	//for test
@@ -107,7 +140,7 @@ for(int i=1;i<22;i++)
 	imshow("4",subtractImg/20);
 	imshow("5",isValidMap*255);
 	imshow("6",diffImg);
-	//waitKey(0);
+	waitKey(0);
 }
 
 }

@@ -25,20 +25,31 @@ clock_t timer;
 #if 1
 int main()
 {
-	int i = 4;
+	int i = 7;
+	char root[] = "E:/MyDocument/klive sync/计算机视觉/Stereo_Matching/Data Set/Middlebury2006/half size/data";
 	char dirL[100];
 	char dirR[100];
+	char dirTrue[100];
 	char dirDispC[100];
 	char dirDispF[100];
 	char dirDispS[100];
-	sprintf(dirL,"%s%d%s","./data",i,"/view1.png");
-	sprintf(dirR,"%s%d%s","./data",i,"/view5.png");
-	sprintf(dirDispC,"%s%d%s","./data",i,"/DispC.png");
-	sprintf(dirDispF,"%s%d%s","./data",i,"/DispF.png");
-	sprintf(dirDispS,"%s%d%s","./data",i,"/DispS.png");
+	char dirDispD[100];
+
+for(int i=1;i<22;i++)
+{
+	sprintf(dirL,"%s%d%s",root,i,"/view1.png");
+	sprintf(dirR,"%s%d%s",root,i,"/view5.png");
+	sprintf(dirTrue,"%s%d%s",root,i,"/disp1.png");
+
+	sprintf(dirDispC,"%s%d%s",root,i,"/DispC.png");
+	sprintf(dirDispF,"%s%d%s",root,i,"/DispF.png");
+	sprintf(dirDispS,"%s%d%s",root,i,"/DispS.png");
+	sprintf(dirDispD,"%s%d%s",root,i,"/DispD.png");
 
 	const cv::Mat imgL = cv::imread (dirL, 0);//("./data/scene1.row3.col3.ppm", 0);//("./data2/view1_half.png", 0);//("./data/scene1.row3.col3.ppm", 0); //Load as grayscale
 	const cv::Mat imgR = cv::imread (dirR, 0);//("./data/scene1.row3.col4.ppm", 0);
+	const cv::Mat trueDispImg = cv::imread (dirTrue, 0);
+
 	double xDiffThresh = 12 ;
 	double costThresh = 10;
 	double peakRatio = 3;//cm2/cm1
@@ -67,26 +78,37 @@ int main()
 	int winWidth = 7;
 	int deviation = 10;
 	double validThreshold = 10;
-	double curvThreshold = -1;
+	double curvThreshold = -1.5;
+	double peakRatioS = 1.2;
 	timer = clock();
 	//深度求精函数
-	boxFilterDepthRefine( imgL, imgR, FilterMat, fineDepthMap,isValidMap, dLevels ,winWidth,deviation,validThreshold,curvThreshold);
+	boxFilterDepthRefine( imgL, imgR, FilterMat, fineDepthMap,isValidMap, dLevels ,winWidth,deviation,validThreshold,curvThreshold,peakRatioS);
 	cout<<clock()-timer<<endl;
 
 	//for test
 	Mat subtractImg(imgL.size(),CV_64FC1,Scalar(0));
+	Mat diffImg(imgL.size(),CV_64FC1,Scalar(0));
 	for(int i =0;i<fineDepthMap.rows;i++)
 		for(int j=0;j<fineDepthMap.cols;j++)
+		{
 			subtractImg.at<double>(i,j) = (isValidMap.at<uchar>(i,j)==1 ? fineDepthMap.at<double>(i,j):0);
+			diffImg.at<double>(i,j) = ( isValidMap.at<uchar>(i,j)==1 ? abs( 2* fineDepthMap.at<double>(i,j) - trueDispImg.at<uchar>(i,j) ):0 ); 
+		}
 
 	imwrite(dirDispC, FilterMat*2);//imwrite("data3/dispC.jpg",FilterMat);
 	imwrite(dirDispF,fineDepthMap*2);//imwrite("data3/dispF.jpg",fineDepthMap);
 	imwrite(dirDispS,subtractImg*2);//imwrite("data3/dispS.jpg",subtractImg);
+	imwrite(dirDispD,diffImg);
+
+	imshow("0",trueDispImg);
 	imshow("1",FilterMat/60);
 	imshow("2",sparseDisp/20);
 	imshow("3",fineDepthMap/20);
 	imshow("4",subtractImg/20);
-	waitKey(0);
+	imshow("5",isValidMap*255);
+	imshow("6",diffImg);
+	//waitKey(0);
+}
 
 }
 

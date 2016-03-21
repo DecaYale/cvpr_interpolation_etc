@@ -74,11 +74,11 @@ void offsetGenerate2(cv::Mat& dispMap, cv::Mat & offsetImg, int deviation)
 //
 //////////////////////////////////////////////////////////////////////////
 
-void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &coarseDepthMap, cv::Mat &fineDepthMap,cv:: Mat & isValid, int dLevels ,int winWidth,int deviation,double validThreshold,double curvThreshold)
+void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &coarseDepthMap, cv::Mat &fineDepthMap,cv:: Mat & isValid, int dLevels ,int winWidth,int deviation,double validThreshold,double curvThreshold,double peakRatio)
 {
 	int height = img_L.rows;
 	int width = img_L.cols;
-	int patchSize=winWidth*winWidth;
+	int patchArea=winWidth*winWidth;//int patchSize=winWidth*winWidth;
 	int *size = new int[3];
 	size[0] = dLevels; size[1] = height; size[2] = width;
 	double val = 1E5;	//大了会出问题，why？
@@ -142,10 +142,12 @@ void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &c
 			{
 				if (i-winWidth <0 || j-winWidth<0) continue;
 				
-				winCostCube->at<double>(d,i,j) = dataCostCube->at<double>(d,i,j)
+				winCostCube->at<double>(d,i,j) = (
+					dataCostCube->at<double>(d,i,j)
 					+dataCostCube->at<double>(d,i-winWidth,j-winWidth)
 					-dataCostCube->at<double>(d,i-winWidth,j)
-					-dataCostCube->at<double>(d,i,j-winWidth);
+					-dataCostCube->at<double>(d,i,j-winWidth)
+					); // /patchArea 取平均
 
 			}
 		}
@@ -157,7 +159,9 @@ void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &c
 		for(int j=0; j<width; j++)
 		{
 			double min_t = 1e20;
+			double min2_t = 1e20;
 			double d_min = 0;
+			double d_min2 = 0;
 			double cost_tp ;
 			double cost_tn ;
 			double curvation;
@@ -225,16 +229,25 @@ void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &c
 
 				if (cost_t < min_t ) 
 				{
-					min_t = cost_t;
+					min2_t = min_t; //次小的
+					d_min2 = d_min;
+
+					min_t = cost_t; // 最小的
 					d_min = d;
 
 					//curvation = 2*cost_t - cost_tn - cost_tp;
+				}
+				else if (cost_t < min2_t)
+				{
+					min2_t  = cost_t;
+					d_min2 = d;
 				}
 			}
 			fineDepthMap.at<double>(i,j) = d_min; //赋值为最小cost 的d
 
 			//isValid Mat 赋值
 			double cost_t = winCostCube->at<double>(d_min,i,j);
+			double cost2_t = winCostCube->at<double>(d_min2,i,j);
 
 			if (d_min==0)
 			{
@@ -251,20 +264,27 @@ void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &c
 				cost_tp = winCostCube->at<double>(d_min-1,i,j);
 				cost_tn = winCostCube->at<double>(d_min+1,i,j);
 			}
+			//提取实际cost
+
 			int n,m;
-			int patchSize=winWidth*winWidth;
+			//int patchSize=winWidth*winWidth;
 			m = (int)(cost_t/val);
-			n = patchSize - m;
+			n = patchArea - m;
 			cost_t = (cost_t - val* m)/n;
+
+			m = (int)(cost2_t/val);
+			n = patchArea - m;
+			cost2_t = (cost2_t - val* m)/n;
+
 			m = (int)(cost_tn/val);
-			n = patchSize - m;
+			n = patchArea - m;
 			cost_tn = (cost_tn - val * m)/n;
 			m = (int)(cost_tp/val);
-			n = patchSize - m;
+			n = patchArea - m;
 			cost_tp = (cost_tp - val * m)/n;
 			curvation = 2*cost_t - cost_tn - cost_tp;
 			min_t = cost_t;//!!!
-			if (min_t< validThreshold &&  curvation<curvThreshold)//if (min_t/(winWidth*winWidth - t) < validThreshold)
+			if (min_t< validThreshold &&  curvation<curvThreshold && cost2_t/cost_t > peakRatio)//if (min_t/(winWidth*winWidth - t) < validThreshold)
 			{
 				isValid.at<uchar>(i,j) = 1;
 			}

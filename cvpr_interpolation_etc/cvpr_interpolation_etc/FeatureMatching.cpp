@@ -320,6 +320,6 @@ void sparseDisparity(const Mat & imgL,const Mat & imgR, Mat & sparseDisp, double
 
 	}
 	imshow("1",imgC);
-	waitKey(0);
+	//waitKey(0);
 
 }

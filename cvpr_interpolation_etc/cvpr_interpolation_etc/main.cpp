@@ -25,20 +25,33 @@ clock_t timer;
 #if 1
 int main()
 {
-	const cv::Mat imgL = cv::imread ("./data/scene1.row3.col3.ppm", 0);//("./data/scene1.row3.col3.ppm", 0);//("./data2/view1_half.png", 0);//("./data/scene1.row3.col3.ppm", 0); //Load as grayscale
-	const cv::Mat imgR = cv::imread ("./data/scene1.row3.col4.ppm", 0);//("./data/scene1.row3.col4.ppm", 0);
-	double xDiffThresh = 20 ;
-	double costThresh = 20;
+	int i = 4;
+	char dirL[100];
+	char dirR[100];
+	char dirDispC[100];
+	char dirDispF[100];
+	char dirDispS[100];
+	sprintf(dirL,"%s%d%s","./data",i,"/view1.png");
+	sprintf(dirR,"%s%d%s","./data",i,"/view5.png");
+	sprintf(dirDispC,"%s%d%s","./data",i,"/DispC.png");
+	sprintf(dirDispF,"%s%d%s","./data",i,"/DispF.png");
+	sprintf(dirDispS,"%s%d%s","./data",i,"/DispS.png");
+
+	const cv::Mat imgL = cv::imread (dirL, 0);//("./data/scene1.row3.col3.ppm", 0);//("./data2/view1_half.png", 0);//("./data/scene1.row3.col3.ppm", 0); //Load as grayscale
+	const cv::Mat imgR = cv::imread (dirR, 0);//("./data/scene1.row3.col4.ppm", 0);
+	double xDiffThresh = 12 ;
+	double costThresh = 10;
+	double peakRatio = 3;//cm2/cm1
 	int winSize = 5;
 	Mat sparseDisp(imgL.size(),CV_64FC1,Scalar(0));
 
-	sparseDisparity(imgL,imgR,sparseDisp, xDiffThresh,costThresh, winSize);
+	sparseDisparity(imgL,imgR,sparseDisp, xDiffThresh,costThresh, peakRatio, winSize);
 
 
 
 	double dSigma1 = 10;
 	double dSigma2 = 100;
-	int nWindows = 51;//双边滤波窗口大小
+	int nWindows = 71;//双边滤波窗口大小
 	cv::Mat FilterMat(sparseDisp.size(),CV_64FC1,Scalar(0));
 	cv::Mat colorWeight(sparseDisp.size(),CV_64FC1,Scalar(0));//注意无效点处为0，否则会出错。
 	timer = clock();
@@ -50,19 +63,29 @@ int main()
 	//深度求精
 	Mat fineDepthMap(imgL.size(),CV_64FC1,Scalar(0));
 	Mat isValidMap(imgL.size(),CV_8UC1,Scalar(0));
-	int dLevels = 20;
-	int winWidth = 5;
-	int deviation = 5;
-	double validThreshold = 5;
-	double curvThreshold = -2;
+	int dLevels = 100;
+	int winWidth = 7;
+	int deviation = 10;
+	double validThreshold = 10;
+	double curvThreshold = -1;
 	timer = clock();
 	//深度求精函数
 	boxFilterDepthRefine( imgL, imgR, FilterMat, fineDepthMap,isValidMap, dLevels ,winWidth,deviation,validThreshold,curvThreshold);
 	cout<<clock()-timer<<endl;
 
+	//for test
+	Mat subtractImg(imgL.size(),CV_64FC1,Scalar(0));
+	for(int i =0;i<fineDepthMap.rows;i++)
+		for(int j=0;j<fineDepthMap.cols;j++)
+			subtractImg.at<double>(i,j) = (isValidMap.at<uchar>(i,j)==1 ? fineDepthMap.at<double>(i,j):0);
 
-	imshow("1",FilterMat/20);
+	imwrite(dirDispC, FilterMat*2);//imwrite("data3/dispC.jpg",FilterMat);
+	imwrite(dirDispF,fineDepthMap*2);//imwrite("data3/dispF.jpg",fineDepthMap);
+	imwrite(dirDispS,subtractImg*2);//imwrite("data3/dispS.jpg",subtractImg);
+	imshow("1",FilterMat/60);
 	imshow("2",sparseDisp/20);
+	imshow("3",fineDepthMap/20);
+	imshow("4",subtractImg/20);
 	waitKey(0);
 
 }

@@ -77,7 +77,7 @@ double matchCost(const Mat & imgL, const Mat & imgR,int xl,int yl,int xr,int yr,
 	cost /= (winSize * winSize);
 	return cost;
 }
-void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> > & listL,const vector<vector<int> > & listR,vector <vector<int> > & pair,double costThresh,int winSize)
+void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> > & listL,const vector<vector<int> > & listR,vector <vector<int> > & pair,double costThresh,double peakRatio, int winSize)
 {
 	int H = imgL.rows;
 	int W = imgL.cols;
@@ -186,7 +186,7 @@ void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> 
 			//if (minIdx != -1)
 				lrMinList[l].push_back(minIdx);//将与左边第y行，第l个特征点最接近的 右边第y行的特征点保存
 			//if (min2Idx != -1)
-				//lrMinList[l].push_back(min2Idx);//将与左边第y行，第l个特征点次接近的 右边第y行的特征点保存
+				lrMinList[l].push_back(min2Idx);//将与左边第y行，第l个特征点次接近的 右边第y行的特征点保存
 
 		}
 
@@ -219,7 +219,7 @@ void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> 
 			//if (minIdx != -1)
 				rlMinList[r].push_back(minIdx);
 			//if (min2Idx != -1)
-				//rlMinList[r].push_back(min2Idx);
+				rlMinList[r].push_back(min2Idx);
 
 		}
 		//交叉验证 + peak ratio?
@@ -239,6 +239,8 @@ void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> 
 
 			if(l == rLover && dist[l][lLover]< costThresh) //	&& dist[l][lLover] < 11
 			{
+				if (lrMinList[l][1] != -1 && dist[l][lrMinList[l][1]]/dist[l][lLover]  < peakRatio ) continue;
+
 				tmp.push_back(listL[y][l] );
 				tmp.push_back(y);
 				tmp.push_back(listR[y][lLover]);
@@ -253,7 +255,7 @@ void featureMatching(const Mat & imgL,const Mat & imgR,const vector<vector<int> 
 	
 
 }
-void sparseDisparity(const Mat & imgL,const Mat & imgR, Mat & sparseDisp, double xDiffThresh, double costThresh,int winSize)
+void sparseDisparity(const Mat & imgL,const Mat & imgR, Mat & sparseDisp, double xDiffThresh, double costThresh,double peakRatio, int winSize)
 {
 	Mat imgLGradient(imgL.size(),CV_64FC1,Scalar(0));
 	Mat imgRGradient(imgR.size(),CV_64FC1,Scalar(0));
@@ -272,7 +274,7 @@ void sparseDisparity(const Mat & imgL,const Mat & imgR, Mat & sparseDisp, double
 	
 	vector <vector<int> > pair;
 
-	featureMatching(imgL,imgR,listL, listR, pair, costThresh, winSize);
+	featureMatching(imgL,imgR,listL, listR, pair, costThresh, peakRatio, winSize);
 
 	if (sparseDisp.size != imgL.size) sparseDisp.create(imgL.size(),CV_32SC1);
 	int H = sparseDisp.rows;

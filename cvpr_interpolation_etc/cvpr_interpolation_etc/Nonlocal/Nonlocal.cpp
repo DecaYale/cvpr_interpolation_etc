@@ -89,9 +89,10 @@ void Nonlocal::stereo(const Mat & imgL, Mat & datacost,Mat & labelimg,double sig
 	//	{
 	//	ZIntImage zimg;
 	//	zimg.CreateAndInit(block.m_iWidth,block.m_iHeight,3,0);
-	//init(block.m_iHeight,block.m_iWidth,datacost.size[],sigma);//init(block.m_iHeight,block.m_iWidth,datacost.GetChannel(),sigma);
 	int H = imgL.rows;
 	int W = imgL.cols;
+	init(H, W, datacost.size[0],sigma);//init(block.m_iHeight,block.m_iWidth,datacost.GetChannel(),sigma);
+	
 
 	m_tf.init(m_h,m_w,3,m_sigma_range,4);
 
@@ -103,15 +104,15 @@ void Nonlocal::stereo(const Mat & imgL, Mat & datacost,Mat & labelimg,double sig
 
 			//union uname u1;
 			//u1.limit_data =  ((int)(outColor[0]));
-			m_left[idy][idx][0]= imgL.at<double>(idx,idy);//u1.buffer[0];
+			m_left[idy][idx][0]= imgL.at<uchar>(idy,idx);//u1.buffer[0];
 			//		zimg.at(idx,idy,0)=m_left[idy][idx][0];
 
 			//u1.limit_data =  ((int)(outColor[1]));
-			m_left[idy][idx][1]= imgL.at<double>(idx,idy);//u1.buffer[0];
+			m_left[idy][idx][1]= imgL.at<uchar>(idy,idx);//u1.buffer[0];
 			//	zimg.at(idx,idy,1)=m_left[idy][idx][1];
 
 			//u1.limit_data =  ((int)(outColor[2]));
-			m_left[idy][idx][2]= imgL.at<double>(idx,idy);//u1.buffer[0];
+			m_left[idy][idx][2]= imgL.at<uchar>(idy,idx);//u1.buffer[0];
 			//		zimg.at(idx,idy,2)=m_left[idy][idx][2];
 
 			//		cout<<(int)m_left[idy][idx][0]<<"  "<<(int)(int)m_left[idy][idx][1]<<"  "<<m_left[idy][idx][2]<<endl;
@@ -135,7 +136,7 @@ void Nonlocal::stereo(const Mat & imgL, Mat & datacost,Mat & labelimg,double sig
 		for(int idx=0; idx<W ; idx++)//for(int idx=block.m_X;idx<block.m_X+block.m_iWidth;idx++)
 			for(int idy=0; idy<H; idy++)
 			{
-				labelimg.at<int>(idy,idx);//labelimg.at(idx,idy)=0;
+				labelimg.at<double>(idy,idx)=0;//labelimg.at(idx,idy)=0;
 				double min_val=1e23;
 				for(int idsp=0;idsp<datacost.size[0];idsp++)
 				{
@@ -144,7 +145,7 @@ void Nonlocal::stereo(const Mat & imgL, Mat & datacost,Mat & labelimg,double sig
 					if( datacost.at<double>(idsp,idy,idx) < min_val )
 					{
 						min_val=datacost.at<double>(idsp,idy,idx);
-						labelimg.at<int>(idy,idx)=idsp;
+						labelimg.at<double>(idy,idx)=idsp;
 					}
 				}
 			}

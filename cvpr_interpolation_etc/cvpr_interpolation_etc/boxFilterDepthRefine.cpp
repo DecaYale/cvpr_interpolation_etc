@@ -322,7 +322,186 @@ void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &c
 	delete offsetMap;
 }
 
+cv::Mat * boxFilterDepthRefine_test(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &coarseDepthMap, const vector<bool> & dispSample, cv::Mat &fineDepthMap,cv:: Mat & isValid, int dLevels ,int winWidth,int deviation,double validThreshold,double curvThreshold,double peakRatio)
+{
+	int height = img_L.rows;
+	int width = img_L.cols;
+	int patchArea=winWidth*winWidth;//int patchSize=winWidth*winWidth;
+	int *size = new int[3];
 
+	dLevels = dispSample.size();//+1+1;//dlevels 是图像中最大的disparity valued
+	size[0] = dLevels; size[1] = height; size[2] = width;
+	double val = 1E5;	//大了会出问题，why？
+	cv::Mat * dataCostCube = new Mat(3,size,CV_64FC1,Scalar(val) );
+	cv::Mat * winCostCube = new Mat(3,size,CV_64FC1,Scalar(0) );
+	cv::Mat * offsetMap = new Mat(img_L.size(),CV_64FC1,Scalar(0));
+
+	offsetGenerate(coarseDepthMap, *offsetMap, deviation);
+	assert(img_L.channels() == 1);
+	//计算raw cost
+	int range = 2*deviation+1;
+	
+	for(int i=0;i<height;i++)
+	{
+		for(int j=0; j<width; j++)
+		{
+			for(int d=offsetMap->at<double>(i,j);
+				d < offsetMap->at<double>(i,j)+ 2*deviation+1;
+				d++
+				)
+			{
+				if (j-d < 0 || d>=dLevels) continue;
+
+				dataCostCube->at<double>(d,i,j) = abs( 
+					img_L.at<uchar>(i,j) - img_R.at<uchar>(i,j-d)
+					);
+			}
+		}
+	}
+	//计算summed area table
+	Mat * costMap_d = new Mat(img_L.size(),CV_64FC1,Scalar(0));
+	for(int d=0; d<dLevels; d++)
+	{
+		if ( !dispSample.at(d) ) continue;///
+
+		double * costMap_d = (double*)(dataCostCube->data + d*( dataCostCube->step[0]) );
+		integralImgCal(costMap_d, height,width,dataCostCube->step[1]);
+	}
+
+
+	//计算winCostCube
+	for(int d=0; d<dLevels; d++)
+	{
+		if (! dispSample.at(d)) continue;///
+
+		for(int i=0;i<height; i++)
+		{
+			for(int j=0; j<width; j++)
+			{
+				if (i-winWidth <0 || j-winWidth<0) continue;
+				
+				winCostCube->at<double>(d,i,j) = (
+					dataCostCube->at<double>(d,i,j)
+					+dataCostCube->at<double>(d,i-winWidth,j-winWidth)
+					-dataCostCube->at<double>(d,i-winWidth,j)
+					-dataCostCube->at<double>(d,i,j-winWidth)
+					); // /patchArea 取平均
+
+			}
+		}
+
+	}
+	//WTA
+	for(int i=0;i<height; i++)
+	{
+		for(int j=0; j<width; j++)
+		{
+			double min_t = 1e20;
+			double min2_t = 1e20;
+			double d_min = 0;
+			double d_min2 = 0;
+			double cost_tp ;
+			double cost_tn ;
+			double curvation;
+
+			for(int d=0; d<dLevels; d++)
+			{
+				if (! dispSample[d]) continue;///
+				
+				double cost_t = winCostCube->at<double>(d,i,j);//double cost_t = dataCostCube->at<double>(d,i,j);//
+
+			
+
+
+				if (cost_t < min_t ) 
+				{
+					min2_t = min_t; //次小的
+					d_min2 = d_min;
+
+					min_t = cost_t; // 最小的
+					d_min = d;
+
+					//curvation = 2*cost_t - cost_tn - cost_tp;
+				}
+				else if (cost_t < min2_t)
+				{
+					min2_t  = cost_t;
+					d_min2 = d;
+				}
+			}
+			fineDepthMap.at<double>(i,j) = d_min; //赋值为最小cost 的d
+
+			//isValid Mat 赋值
+			double cost_t = winCostCube->at<double>(d_min,i,j);
+			double cost2_t = winCostCube->at<double>(d_min2,i,j);
+
+			if (d_min==0)
+			{
+				cost_tn = winCostCube->at<double>(d_min+1,i,j);
+				cost_tp = cost_tn;
+			}
+			else if (d_min == dLevels-1)
+			{
+				cost_tp = winCostCube->at<double>(d_min-1,i,j);
+				cost_tn = cost_tp;
+			}
+			else 
+			{
+				cost_tp = winCostCube->at<double>(d_min-1,i,j);
+				cost_tn = winCostCube->at<double>(d_min+1,i,j);
+			}
+			//提取实际cost
+
+			int n,m;
+			//int patchSize=winWidth*winWidth;
+			m = (int)(cost_t/val);
+			n = patchArea - m;
+			cost_t = (cost_t - val* m)/n;
+
+			m = (int)(cost2_t/val);
+			n = patchArea - m;
+			cost2_t = (cost2_t - val* m)/n;
+
+			m = (int)(cost_tn/val);
+			n = patchArea - m;
+			cost_tn = (cost_tn - val * m)/n;
+			m = (int)(cost_tp/val);
+			n = patchArea - m;
+			cost_tp = (cost_tp - val * m)/n;
+			curvation = 2*cost_t - cost_tn - cost_tp;
+			min_t = cost_t;//!!!
+			if (min_t< validThreshold &&  curvation<curvThreshold && cost2_t/cost_t > peakRatio)//if (min_t/(winWidth*winWidth - t) < validThreshold)
+			{
+				isValid.at<uchar>(i,j) = 1;
+			}
+			else 
+			{
+				isValid.at<uchar>(i,j) = 0;
+			}
+
+		}
+
+	}
+
+	////有效性确定
+	//for(int i=0;i<height; i++)
+	//{
+	//	for(int j=0; j<width; j++)
+	//	{
+	//		int cost= abs( 
+	//				img_L.at<uchar>(i,j) - img_R.at<uchar>(i, j- fineDepthMap.at<double>(i,j) )
+	//				);
+
+	//		if (cost<validThreshold) isValid.at<uchar>(i,j) = 1;
+	//		else isValid.at<uchar>(i,j) = 0;
+	//	}
+	//}
+
+	delete dataCostCube;
+	//delete winCostCube;
+	delete offsetMap;
+	return winCostCube;
+}
 
 //void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat & coarseDepthMap,cv::Mat &fineDepthMap, cv::Mat offsetMap,int dLevels ,int winWidth)
 //img_L和img_R 是单通道灰度uchar图像

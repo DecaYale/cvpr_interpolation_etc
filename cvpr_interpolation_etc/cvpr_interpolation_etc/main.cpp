@@ -16,18 +16,131 @@
 //#include "DBP.h"
 #include "boxFilterDepthRefine.h"
 #include "FeatureMatching.h"
+#include "Nonlocal/Nonlocal.h"
 using namespace std;
 using namespace cv;
 
 clock_t timer;
 
 
-#if 0
+#if 1
 int main()
 {
 
 	Nonlocal nl;
-	nl.stereo(Mat imgL,double sigma, Mat datacost,bool refine)
+	Mat * winCostCube;
+	//nl.stereo(Mat imgL,double sigma, Mat datacost,bool refine)
+
+
+
+	//int i = 7;
+	char root[] = "E:/MyDocument/klive sync/计算机视觉/Stereo_Matching/Data Set/Middlebury2006/half size/data";
+	char dirL[100];
+	char dirR[100];
+	char dirTrue[100];
+	char dirDispC[100];
+	char dirDispF[100];
+	char dirDispS[100];
+	char dirDispD[100];
+
+	for(int i=1;i<2;i++)
+	{
+		sprintf(dirL,"%s%d%s",root,i,"/view1.png");
+		sprintf(dirR,"%s%d%s",root,i,"/view5.png");
+		sprintf(dirTrue,"%s%d%s",root,i,"/disp1.png");
+
+		sprintf(dirDispC,"%s%d%s",root,i,"/DispC.png");
+		sprintf(dirDispF,"%s%d%s",root,i,"/DispF.png");
+		sprintf(dirDispS,"%s%d%s",root,i,"/DispS.png");
+		sprintf(dirDispD,"%s%d%s",root,i,"/DispD.png");
+
+		const cv::Mat imgL = cv::imread (dirL, 0);//("./data/scene1.row3.col3.ppm", 0);//("./data2/view1_half.png", 0);//("./data/scene1.row3.col3.ppm", 0); //Load as grayscale
+		const cv::Mat imgR = cv::imread (dirR, 0);//("./data/scene1.row3.col4.ppm", 0);
+		const cv::Mat trueDispImg = cv::imread (dirTrue, 0);
+
+		double xDiffThresh = 12 ;
+		double costThresh = 10;
+		double peakRatio = 3;//cm2/cm1
+		int winSize = 5;
+		Mat sparseDisp(imgL.size(),CV_64FC1,Scalar(0));
+
+		sparseDisparity(imgL,imgR,sparseDisp, xDiffThresh,costThresh, peakRatio, winSize);
+
+
+
+
+
+		double dSigma1 = 10;
+		double dSigma2 = 100;
+		int nWindows = 71;//双边滤波窗口大小
+		cv::Mat FilterMat(sparseDisp.size(),CV_64FC1,Scalar(0));
+		cv::Mat colorWeight(sparseDisp.size(),CV_64FC1,Scalar(0));//注意无效点处为0，否则会出错。
+		timer = clock();
+		//快速插值
+
+		FastBFilterDepthInterp(sparseDisp, colorWeight, FilterMat, sparseDisp.cols, sparseDisp.rows, dSigma1, dSigma2, nWindows);//		BFilterDepthInterp(disp_coarse, colorWeight, FilterMat, disp_coarse.cols, disp_coarse.rows, dSigma1, dSigma2, nWindows);
+		cout<<clock()-timer<<endl;	
+
+		//深度求精
+		Mat fineDepthMap(imgL.size(),CV_64FC1,Scalar(0));
+		Mat isValidMap(imgL.size(),CV_8UC1,Scalar(0));
+		int dLevels = 100;
+		int winWidth = 7;
+		int deviation = 10;
+		double validThreshold = 10;
+		double curvThreshold = -1.5;
+		double peakRatioS = 1.2;
+
+
+		vector<bool> isSampled(100);
+		for(int i=0; i<isSampled.size();i++) 
+		{
+			if (i>30 && i<80 )
+				isSampled[i] = 1;
+			else
+				isSampled[i] =0;
+		}
+		timer = clock();
+		//深度求精函数
+		winCostCube = boxFilterDepthRefine_test( imgL, imgR, FilterMat, isSampled, fineDepthMap,isValidMap, dLevels ,winWidth,deviation,validThreshold,curvThreshold,peakRatioS);
+		cout<<clock()-timer<<endl;
+
+
+		double sigma = 1;
+		int size[3];
+		size[0] = dLevels; size[1] = height; size[2] = width;
+		cv::Mat winCostCube = Mat(3,size,CV_64FC1,Scalar(0) );
+
+		Mat depthResult(imgL.size(),CV_64FC1,Scalar(0));
+		nl.stereo(imgL,* winCostCube,depthResult, sigma,0);
+		delete winCostCube;winCostCube = NULL;
+
+
+		//for test
+		Mat subtractImg(imgL.size(),CV_64FC1,Scalar(0));
+		Mat diffImg(imgL.size(),CV_64FC1,Scalar(0));
+		for(int i =0;i<fineDepthMap.rows;i++)
+			for(int j=0;j<fineDepthMap.cols;j++)
+			{
+				subtractImg.at<double>(i,j) = (isValidMap.at<uchar>(i,j)==1 ? fineDepthMap.at<double>(i,j):0);
+				diffImg.at<double>(i,j) = ( isValidMap.at<uchar>(i,j)==1 ? abs( 2* fineDepthMap.at<double>(i,j) - trueDispImg.at<uchar>(i,j) ):0 ); 
+			}
+
+			imwrite(dirDispC, FilterMat*2);//imwrite("data3/dispC.jpg",FilterMat);
+			imwrite(dirDispF,fineDepthMap*2);//imwrite("data3/dispF.jpg",fineDepthMap);
+			imwrite(dirDispS,subtractImg*2);//imwrite("data3/dispS.jpg",subtractImg);
+			imwrite(dirDispD,diffImg);
+
+			imshow("0",trueDispImg);
+			imshow("1",FilterMat/60);
+			imshow("2",sparseDisp/20);
+			imshow("3",fineDepthMap/20);
+			imshow("4",subtractImg/20);
+			imshow("5",isValidMap*255);
+			imshow("6",diffImg);
+			imshow("7",depthResult);
+			waitKey(0);
+	}
 }
 
 

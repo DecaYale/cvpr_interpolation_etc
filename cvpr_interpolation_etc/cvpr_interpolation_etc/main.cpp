@@ -22,7 +22,16 @@ using namespace cv;
 clock_t timer;
 
 
-#if 1
+#if 0
+int main()
+{
+
+	Nonlocal nl;
+	nl.stereo(Mat imgL,double sigma, Mat datacost,bool refine)
+}
+
+
+#elif 1 
 int main()
 {
 	int i = 7;

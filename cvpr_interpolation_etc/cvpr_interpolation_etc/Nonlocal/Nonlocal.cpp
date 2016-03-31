@@ -116,9 +116,16 @@ void Nonlocal::stereo(const Mat & imgL, Mat & datacost,Mat & labelimg,double sig
 			//		zimg.at(idx,idy,2)=m_left[idy][idx][2];
 
 			//		cout<<(int)m_left[idy][idx][0]<<"  "<<(int)(int)m_left[idy][idx][1]<<"  "<<m_left[idy][idx][2]<<endl;
-			for(int idsp=0;idsp<datacost.size[0];idsp++)//for(int idsp=0;idsp<datacost.GetChannel();idsp++)
+			int dl = datacost.size[0];
+			for(int idsp=0;idsp<dl;idsp++)//for(int idsp=0;idsp<datacost.GetChannel();idsp++)
 			{
-				m_cost_vol[idy][idx][idsp] = datacost.at<double>(idsp,idy,idx);//datacost.At(idx,idy,idsp);
+				m_cost_vol[idy][idx][idsp] = (float) datacost.at<double>(idsp,idy,idx);//datacost.At(idx,idy,idsp);
+
+
+				/*if (m_cost_vol[idy][idx][idsp] != 4.9e6 && m_cost_vol[idy][idx][idsp] != 0 )
+				{
+					cout<<idy<<" "<<idx<<":"<<m_cost_vol[idy][idx][idsp]<<" " ;
+				}*/
 				//	if(datacost.At(idx-block.m_X,idy-block.m_Y,idsp) <= 40 && datacost.At(idx-block.m_X,idy-block.m_Y,idsp) >= 0);
 				//	else cout<<idx<<"  "<<idy<<"  "<<idsp<<"  "<<datacost.At(idx-block.m_X,idy-block.m_Y,idsp)<<endl;
 			}
@@ -140,12 +147,16 @@ void Nonlocal::stereo(const Mat & imgL, Mat & datacost,Mat & labelimg,double sig
 				double min_val=1e23;
 				for(int idsp=0;idsp<datacost.size[0];idsp++)
 				{
-					datacost.at<double>(idsp,idy,idx) = m_cost_vol[idy][idx][idsp];
+					datacost.at<double>(idsp,idy,idx) = (double)m_cost_vol[idy][idx][idsp];
 					//cout<<datacost.At(idx-block.m_X,idy-block.m_Y,idsp)<<endl;
 					if( datacost.at<double>(idsp,idy,idx) < min_val )
 					{
 						min_val=datacost.at<double>(idsp,idy,idx);
 						labelimg.at<double>(idy,idx)=idsp;
+						if(idsp != 0) 
+						{
+							cout<<idsp<<" ";
+						}
 					}
 				}
 			}

@@ -28,7 +28,7 @@ int main()
 {
 
 	Nonlocal nl;
-	Mat * winCostCube;
+	//Mat * winCostCube;
 	//nl.stereo(Mat imgL,double sigma, Mat datacost,bool refine)
 
 
@@ -98,22 +98,27 @@ int main()
 			if (i>30 && i<80 )
 				isSampled[i] = 1;
 			else
-				isSampled[i] =0;
+				isSampled[i] = 0;
 		}
 		timer = clock();
+
+		//
+		int size[3];
+		size[0] = dLevels; size[1] = imgL.rows; size[2] = imgL.cols;
+		cv::Mat winCostCube = Mat(3,size,CV_64FC1,Scalar(0) );
+
+
 		//深度求精函数
-		winCostCube = boxFilterDepthRefine_test( imgL, imgR, FilterMat, isSampled, fineDepthMap,isValidMap, dLevels ,winWidth,deviation,validThreshold,curvThreshold,peakRatioS);
+		boxFilterDepthRefine_test( imgL, imgR, FilterMat, isSampled, fineDepthMap,winCostCube,isValidMap, dLevels ,winWidth,deviation,validThreshold,curvThreshold,peakRatioS);
 		cout<<clock()-timer<<endl;
 
 
 		double sigma = 1;
-		int size[3];
-		size[0] = dLevels; size[1] = height; size[2] = width;
-		cv::Mat winCostCube = Mat(3,size,CV_64FC1,Scalar(0) );
-
+	
+		//int fortest = winCostCube.size[0];
 		Mat depthResult(imgL.size(),CV_64FC1,Scalar(0));
-		nl.stereo(imgL,* winCostCube,depthResult, sigma,0);
-		delete winCostCube;winCostCube = NULL;
+		nl.stereo(imgL, winCostCube, depthResult, sigma,0);//nl.stereo(imgL,* winCostCube,depthResult, sigma,0);
+		//delete winCostCube;winCostCube = NULL;
 
 
 		//for test

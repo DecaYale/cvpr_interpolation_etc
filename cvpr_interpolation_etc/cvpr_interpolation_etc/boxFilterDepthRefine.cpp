@@ -322,7 +322,7 @@ void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &c
 	delete offsetMap;
 }
 
-cv::Mat * boxFilterDepthRefine_test(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &coarseDepthMap, const vector<bool> & dispSample, cv::Mat &fineDepthMap,cv:: Mat & isValid, int dLevels ,int winWidth,int deviation,double validThreshold,double curvThreshold,double peakRatio)
+void  boxFilterDepthRefine_test(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat &coarseDepthMap, const vector<bool> & dispSample, cv::Mat &fineDepthMap,cv::Mat & winCostCube,cv:: Mat & isValid, int dLevels ,int winWidth,int deviation,double validThreshold,double curvThreshold,double peakRatio)
 {
 	int height = img_L.rows;
 	int width = img_L.cols;
@@ -333,7 +333,7 @@ cv::Mat * boxFilterDepthRefine_test(const cv::Mat & img_L,const cv::Mat & img_R,
 	size[0] = dLevels; size[1] = height; size[2] = width;
 	double val = 1E5;	//大了会出问题，why？
 	cv::Mat * dataCostCube = new Mat(3,size,CV_64FC1,Scalar(val) );
-	cv::Mat * winCostCube = new Mat(3,size,CV_64FC1,Scalar(0) );
+	//cv::Mat * winCostCube = new Mat(3,size,CV_64FC1,Scalar(0) );
 	cv::Mat * offsetMap = new Mat(img_L.size(),CV_64FC1,Scalar(0));
 
 	offsetGenerate(coarseDepthMap, *offsetMap, deviation);
@@ -380,7 +380,7 @@ cv::Mat * boxFilterDepthRefine_test(const cv::Mat & img_L,const cv::Mat & img_R,
 			{
 				if (i-winWidth <0 || j-winWidth<0) continue;
 				
-				winCostCube->at<double>(d,i,j) = (
+				winCostCube. at<double>(d,i,j) = (
 					dataCostCube->at<double>(d,i,j)
 					+dataCostCube->at<double>(d,i-winWidth,j-winWidth)
 					-dataCostCube->at<double>(d,i-winWidth,j)
@@ -408,7 +408,7 @@ cv::Mat * boxFilterDepthRefine_test(const cv::Mat & img_L,const cv::Mat & img_R,
 			{
 				if (! dispSample[d]) continue;///
 				
-				double cost_t = winCostCube->at<double>(d,i,j);//double cost_t = dataCostCube->at<double>(d,i,j);//
+				double cost_t = winCostCube.at<double>(d,i,j);//double cost_t = dataCostCube->at<double>(d,i,j);//
 
 			
 
@@ -432,23 +432,23 @@ cv::Mat * boxFilterDepthRefine_test(const cv::Mat & img_L,const cv::Mat & img_R,
 			fineDepthMap.at<double>(i,j) = d_min; //赋值为最小cost 的d
 
 			//isValid Mat 赋值
-			double cost_t = winCostCube->at<double>(d_min,i,j);
-			double cost2_t = winCostCube->at<double>(d_min2,i,j);
+			double cost_t = winCostCube.at<double>(d_min,i,j);
+			double cost2_t = winCostCube.at<double>(d_min2,i,j);
 
 			if (d_min==0)
 			{
-				cost_tn = winCostCube->at<double>(d_min+1,i,j);
+				cost_tn = winCostCube.at<double>(d_min+1,i,j);
 				cost_tp = cost_tn;
 			}
 			else if (d_min == dLevels-1)
 			{
-				cost_tp = winCostCube->at<double>(d_min-1,i,j);
+				cost_tp = winCostCube.at<double>(d_min-1,i,j);
 				cost_tn = cost_tp;
 			}
 			else 
 			{
-				cost_tp = winCostCube->at<double>(d_min-1,i,j);
-				cost_tn = winCostCube->at<double>(d_min+1,i,j);
+				cost_tp = winCostCube.at<double>(d_min-1,i,j);
+				cost_tn = winCostCube.at<double>(d_min+1,i,j);
 			}
 			//提取实际cost
 
@@ -500,7 +500,7 @@ cv::Mat * boxFilterDepthRefine_test(const cv::Mat & img_L,const cv::Mat & img_R,
 	delete dataCostCube;
 	//delete winCostCube;
 	delete offsetMap;
-	return winCostCube;
+	//return winCostCube;
 }
 
 //void boxFilterDepthRefine(const cv::Mat & img_L,const cv::Mat & img_R,cv::Mat & coarseDepthMap,cv::Mat &fineDepthMap, cv::Mat offsetMap,int dLevels ,int winWidth)

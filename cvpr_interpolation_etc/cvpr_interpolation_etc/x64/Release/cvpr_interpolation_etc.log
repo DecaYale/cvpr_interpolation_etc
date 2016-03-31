@@ -1,4 +1,4 @@
-﻿Build started 2016/3/30 20:39:01.
+﻿Build started 2016/3/31 17:09:58.
      1>Project "F:\GitHub\cvpr_interpolation_etc\cvpr_interpolation_etc\cvpr_interpolation_etc\cvpr_interpolation_etc.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "x64\Release\cvpr_interpolation_etc.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -8,7 +8,6 @@
      1>F:\GitHub\cvpr_interpolation_etc\cvpr_interpolation_etc\cvpr_interpolation_etc\Nonlocal/Nonlocal_basic.h(77): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
      1>F:\GitHub\cvpr_interpolation_etc\cvpr_interpolation_etc\cvpr_interpolation_etc\Nonlocal/Nonlocal_basic.h(78): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
      1>F:\GitHub\cvpr_interpolation_etc\cvpr_interpolation_etc\cvpr_interpolation_etc\Nonlocal/Nonlocal_basic.h(80): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>Nonlocal\Nonlocal.cpp(121): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
          All outputs are up-to-date.
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"F:\GitHub\cvpr_interpolation_etc\cvpr_interpolation_etc\x64\Release\cvpr_interpolation_etc.exe" /INCREMENTAL:NO /NOLOGO opencv_calib3d2410.lib opencv_contrib2410.lib opencv_core2410.lib opencv_features2d2410.lib opencv_flann2410.lib opencv_gpu2410.lib opencv_highgui2410.lib opencv_imgproc2410.lib opencv_legacy2410.lib opencv_ml2410.lib opencv_objdetect2410.lib opencv_ts2410.lib opencv_video2410.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"x64\Release\cvpr_interpolation_etc.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"F:\GitHub\cvpr_interpolation_etc\cvpr_interpolation_etc\x64\Release\cvpr_interpolation_etc.pdb" /SUBSYSTEM:CONSOLE /HEAP:"10000000","10000000" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"F:\GitHub\cvpr_interpolation_etc\cvpr_interpolation_etc\x64\Release\cvpr_interpolation_etc.lib" /MACHINE:X64 x64\Release\AdditionalFuncs.obj
@@ -33,4 +32,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.12
+Time Elapsed 00:00:03.71

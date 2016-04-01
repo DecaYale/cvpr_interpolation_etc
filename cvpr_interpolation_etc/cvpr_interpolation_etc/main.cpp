@@ -43,7 +43,7 @@ int main()
 	char dirDispS[100];
 	char dirDispD[100];
 
-	for(int i=1;i<2;i++)
+	for(int i=2;i<3;i++)
 	{
 		sprintf(dirL,"%s%d%s",root,i,"/view1.png");
 		sprintf(dirR,"%s%d%s",root,i,"/view5.png");

@@ -16,7 +16,10 @@ public:
 	CFastDepthInterp();
 	CFastDepthInterp(const cv::Mat & pGrayMat_v, const cv::Size & v_imgSize,int v_interpWinSize,double v_sigma1,double v_sigma2);
 	void fastBFilterDepthInterp(double INVAILD);
-
+	void getFilterImg(cv:: Mat & FilterImg)
+	{
+		FilterImg = FilterMat->clone();
+	}
 
 	~CFastDepthInterp()
 	{

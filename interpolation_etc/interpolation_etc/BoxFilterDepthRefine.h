@@ -24,7 +24,7 @@ public:
 	CBoxFilterDepthRefine();
 	CBoxFilterDepthRefine(const cv::Mat & imgL,const cv::Mat & imgR,
 						int dLevels, int winWidth = 5,int deviation = 10, 
-						double validThreshold = 10, double curvThreshold = -2, double peakRatio = 1.2):
+						double validThreshold = 10, double curvThreshold = -1.5, double peakRatio = 1.2):
 						m_dLevels(dLevels),m_winWidth(winWidth),m_deviation(deviation),
 						m_validThreshold(validThreshold),m_curvThreshold(curvThreshold),m_peakRatio(peakRatio)
 	{
@@ -45,7 +45,9 @@ public:
 		if (m_confidenceMap != NULL) delete m_confidenceMap;
 	}
 	
-
+	void setDeviation(int dev){ m_deviation = dev;}
+	void setDLevels(int d){ m_deviation = d;}
+	//void set... 
 	void boxFilterDepthRefine(const cv::Mat &coarseDepthMap,cv:: Mat & fineDepthMap);
 	void getDataCostCube(cv::Mat & data_cost_cube);
 	void getConfidenceMap(cv::Mat & confidence_map);

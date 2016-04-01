@@ -1,4 +1,4 @@
-﻿Build started 2016/4/1 13:20:17.
+﻿Build started 2016/4/1 16:14:01.
      1>Project "F:\GitHub\cvpr_interpolation_etc\cvpr_interpolation_etc\cvpr_interpolation_etc\cvpr_interpolation_etc.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "x64\Release\cvpr_interpolation_etc.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -52,4 +52,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.23
+Time Elapsed 00:00:04.49

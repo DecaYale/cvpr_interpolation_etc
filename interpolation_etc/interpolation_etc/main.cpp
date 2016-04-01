@@ -23,22 +23,19 @@ clock_t timer;
 #if 1
 int main()
 {
-	const cv::Mat imgL = cv::imread ("./data/scene1.row3.col3.ppm", 0);//("./data/scene1.row3.col3.ppm", 0);//("./data2/view1_half.png", 0);//("./data/scene1.row3.col3.ppm", 0); //Load as grayscale
-	const cv::Mat imgR = cv::imread ("./data/scene1.row3.col4.ppm", 0);//("./data/scene1.row3.col4.ppm", 0);
+	char root[] = "E:/MyDocument/klive sync/计算机视觉/Stereo_Matching/Data Set/Middlebury2006/half size/data";
+	char dirL[100];
+	char dirR[100];
+	sprintf(dirL,"%s%d%s",root,2,"/view1.png");
+	sprintf(dirR,"%s%d%s",root,2,"/view5.png");
 
-	//cv::Mat dispTrue = cv::imread ("./data/truedisp.row3.col3.pgm", 0);//("./data/truedisp.row3.col3.pgm", 0);//("./data2/disp1_half.png", 0);//("./data/truedisp.row3.col3.pgm", 0);
-	//dispTrue = dispTrue/15;///15;//处理后dispTrue是真是的深度数据
 
-	////sift 获得特征点并在相应深度图上采样获得disp_coarse
-	//cv::SiftFeatureDetector detector;
-	//std::vector<cv::KeyPoint> keypoints;
-	//detector.detect(imgL, keypoints);
+ 	const cv::Mat imgL = cv::imread (dirL, 0);//("./data/scene1.row3.col3.ppm", 0);//("./data2/view1_half.png", 0);//("./data/scene1.row3.col3.ppm", 0); //Load as grayscale
+	const cv::Mat imgR = cv::imread (dirR, 0);//("./data/scene1.row3.col4.ppm", 0);
+	cout<<dirL;
 
-	// Add results to image and save.
-	//cv::Mat output;
-	//cv::drawKeypoints(imgL, keypoints, output);
-	//cv::imwrite("sift_result.jpg", output);
-	
+	//imshow("test",imgL);
+	//waitKey(0);
 	int gradientStep  = 2;
 	double xDiffThresh = 12 ;
 	double costThresh = 10;
@@ -56,30 +53,34 @@ cout<<clock()-timer<<endl;
 
 	double dSigma1 = 10;
 	double dSigma2 = 100;
-	int nWindows = 51;//双边滤波窗口大小
+	int nWindows = 71;//双边滤波窗口大小
 	
 	//快速插值
 timer =clock();
-	CFastDepthInterp smft(sparseDisp,imgL.size(),nWindows,dSigma1,dSigma2);
-	smft.fastBFilterDepthInterp(0);
+	CFastDepthInterp fdi(sparseDisp,imgL.size(),nWindows,dSigma1,dSigma2);
+	fdi.fastBFilterDepthInterp(0);
+	//fdi.getFilterImg()
 cout<<clock()-timer<<endl;
 	//boxFiler refine 
 	Mat fineDepthMap(imgL.size(),CV_64FC1,Scalar(0));
-	int dLevels = 20;
+	int dLevels = 100;
 timer = clock();
-	CBoxFilterDepthRefine bfdr(imgL,imgR,dLevels);
-	bfdr.boxFilterDepthRefine(sparseDisp,fineDepthMap);
+CBoxFilterDepthRefine bfdr(imgL,imgR,dLevels); //(const cv::Mat & imgL,const cv::Mat & imgR,
+
+	bfdr.setDeviation(30);
+	bfdr.boxFilterDepthRefine(*(fdi.FilterMat),fineDepthMap);
 cout<<clock()-timer<<endl;
 	
 
-Nonlocal nl;
-double sigma = 0.5;
+	Nonlocal nl;
+	double sigma = 0.2;
 
-Mat costCube;
-bfdr.getDataCostCube(costCube);
-Mat depthResult(imgL.size(),CV_64FC1,Scalar(0));
-nl.stereo(imgL, costCube, depthResult, sigma,0);//nl.stereo(imgL,* winCostCube,depthResult, sigma,0);
-
+timer = clock();
+	Mat costCube;
+	bfdr.getDataCostCube(costCube);
+	Mat depthResult(imgL.size(),CV_64FC1,Scalar(0));
+	nl.stereo(imgL, costCube, depthResult, sigma,0);//nl.stereo(imgL,* winCostCube,depthResult, sigma,0);
+cout<<clock()-timer<<endl;
 
 
 //for test
@@ -91,18 +92,20 @@ bfdr.getConfidenceMap(confidenceMap);
 for(int i =0;i<fineDepthMap.rows;i++)
 	for(int j=0;j<fineDepthMap.cols;j++)
 	{
-		subtractImg.at<double>(i,j) = (confidenceMap.at<uchar>(i,j)==1 ? fineDepthMap.at<double>(i,j):0);
+		//subtractImg.at<double>(i,j) = (confidenceMap.at<uchar>(i,j)==1 ? fineDepthMap.at<double>(i,j):0);
+		subtractImg.at<double>(i,j) = (confidenceMap.at<uchar>(i,j)==1 ? fineDepthMap.at<double>(i,j) : depthResult.at<double>(i,j));//depthResult.at<double>(i,j)
 		diffImg.at<double>(i,j) = ( confidenceMap.at<uchar>(i,j)==1 ? abs( 2* fineDepthMap.at<double>(i,j) - confidenceMap.at<uchar>(i,j) ):0 ); 
 	}
 
-	//imshow("0",dispTrue);//*255/15
+	imshow("0",sparseDisp/60);//*255/15
 	imshow("1",imgL);
 	imshow("2",imgR);
 	imshow("3",fineDepthMap/15);
-	imshow("4",*(smft.FilterMat)/15);
+	imshow("4",*(fdi.FilterMat)/15);
 	imshow("5",confidenceMap*255);
-	imshow("6",subtractImg/20);
-	imshow("7",depthResult/20);
+	imshow("6",subtractImg/100);
+	imshow("7",depthResult/100);
+	//imshow("8",diffImg);
 	waitKey(0);
 }
 #elif 1 

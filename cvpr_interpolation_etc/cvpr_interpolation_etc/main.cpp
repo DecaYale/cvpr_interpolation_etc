@@ -105,7 +105,7 @@ int main()
 		//
 		int size[3];
 		size[0] = dLevels; size[1] = imgL.rows; size[2] = imgL.cols;
-		cv::Mat winCostCube = Mat(3,size,CV_64FC1,Scalar(0) );
+		cv::Mat winCostCube = Mat(3,size,CV_64FC1,Scalar(1e10) );
 
 
 		//深度求精函数
@@ -113,7 +113,7 @@ int main()
 		cout<<clock()-timer<<endl;
 
 
-		double sigma = 1;
+		double sigma = 0.1;
 	
 		//int fortest = winCostCube.size[0];
 		Mat depthResult(imgL.size(),CV_64FC1,Scalar(0));
@@ -143,7 +143,7 @@ int main()
 			imshow("4",subtractImg/20);
 			imshow("5",isValidMap*255);
 			imshow("6",diffImg);
-			imshow("7",depthResult);
+			imshow("7",depthResult/100);
 			waitKey(0);
 	}
 }

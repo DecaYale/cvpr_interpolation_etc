@@ -1,9 +1,9 @@
-#include "StereoMethodForTracking.h"
+#include "FastDepthInterp.h"
 using namespace cv;
 
 
 
-CStereoMethodForTracking::CStereoMethodForTracking(cv::Mat & pGrayMat_v,const cv::Size & v_imgSize,int v_interpWinSize,double v_sigma1,double v_sigma2)
+CFastDepthInterp::CFastDepthInterp(const cv::Mat & pGrayMat_v,const cv::Size & v_imgSize,int v_interpWinSize,double v_sigma1,double v_sigma2)
 	:imgSize(v_imgSize),interpWinSize(v_interpWinSize),sigma1(v_sigma1),sigma2(v_sigma2)
 {
 	pGrayMat = new cv::Mat(imgSize, CV_64FC1,cv::Scalar(0));
@@ -20,7 +20,7 @@ CStereoMethodForTracking::CStereoMethodForTracking(cv::Mat & pGrayMat_v,const cv
 		}*/
 	
 }
-void CStereoMethodForTracking::FastBFilterDepthInterp( double INVAILD)//(cv::Mat * pGrayMat, cv::Mat * colorWeight,cv::Mat * FilterMat, int nWidth, int nHeight, double sigma1, double sigma2, int nWinWidth,double INVAILD)
+void CFastDepthInterp::fastBFilterDepthInterp( double INVAILD)//(cv::Mat * pGrayMat, cv::Mat * colorWeight,cv::Mat * FilterMat, int nWidth, int nHeight, double sigma1, double sigma2, int nWinWidth,double INVAILD)
 {
 	int nWidth = imgSize.width;
 	int nHeight = imgSize.height;

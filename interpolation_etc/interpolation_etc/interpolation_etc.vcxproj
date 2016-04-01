@@ -32,6 +32,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="opencv.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -39,6 +40,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>.;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -54,7 +57,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_calib3d2410d.lib;opencv_contrib2410d.lib;opencv_core2410d.lib;opencv_features2d2410d.lib;opencv_flann2410d.lib;opencv_gpu2410d.lib;opencv_highgui2410d.lib;opencv_imgproc2410d.lib;opencv_legacy2410d.lib;opencv_ml2410d.lib;opencv_objdetect2410d.lib;opencv_ts2410d.lib;opencv_video2410d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_calib3d2410d.lib;opencv_contrib2410d.lib;opencv_core2410d.lib;opencv_features2d2410d.lib;opencv_flann2410d.lib;opencv_gpu2410d.lib;opencv_highgui2410d.lib;opencv_imgproc2410d.lib;opencv_legacy2410d.lib;opencv_ml2410d.lib;opencv_objdetect2410d.lib;opencv_ts2410d.lib;opencv_video2410d.lib;opencv_nonfree2410d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <HeapReserveSize>1000000000</HeapReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -76,11 +80,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BoxFilterDepthRefine.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="StereoMethodForTracking.cpp" />
+    <ClCompile Include="FastDepthInterp.cpp" />
+    <ClCompile Include="Nonlocal\ctmf.c" />
+    <ClCompile Include="Nonlocal\CxImageFun.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Nonlocal\mst_kruskals_image.cpp" />
+    <ClCompile Include="Nonlocal\Nonlocal.cpp" />
+    <ClCompile Include="Nonlocal\Nonlocal_basic.cpp" />
+    <ClCompile Include="Nonlocal\tree_filter.cpp" />
+    <ClCompile Include="SimpleFeatureMatching.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="StereoMethodForTracking.h" />
+    <ClInclude Include="BoxFilterDepthRefine.h" />
+    <ClInclude Include="FastDepthInterp.h" />
+    <ClInclude Include="Nonlocal\ctmf.h" />
+    <ClInclude Include="Nonlocal\CxImageFun.h" />
+    <ClInclude Include="Nonlocal\mst_kruskals_image.h" />
+    <ClInclude Include="Nonlocal\Nonlocal.h" />
+    <ClInclude Include="Nonlocal\Nonlocal_basic.h" />
+    <ClInclude Include="Nonlocal\tree_filter.h" />
+    <ClInclude Include="SimpleFeatureMatching.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

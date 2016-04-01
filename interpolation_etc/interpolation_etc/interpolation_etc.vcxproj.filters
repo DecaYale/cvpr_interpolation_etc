@@ -13,17 +13,68 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Nonlocal">
+      <UniqueIdentifier>{84bb8672-7d7d-4680-84bb-fe600ebcaf79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StereoMethodForTracking.cpp">
+    <ClCompile Include="BoxFilterDepthRefine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FastDepthInterp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Nonlocal\ctmf.c">
+      <Filter>Source Files\Nonlocal</Filter>
+    </ClCompile>
+    <ClCompile Include="Nonlocal\CxImageFun.cpp">
+      <Filter>Source Files\Nonlocal</Filter>
+    </ClCompile>
+    <ClCompile Include="Nonlocal\mst_kruskals_image.cpp">
+      <Filter>Source Files\Nonlocal</Filter>
+    </ClCompile>
+    <ClCompile Include="Nonlocal\Nonlocal.cpp">
+      <Filter>Source Files\Nonlocal</Filter>
+    </ClCompile>
+    <ClCompile Include="Nonlocal\Nonlocal_basic.cpp">
+      <Filter>Source Files\Nonlocal</Filter>
+    </ClCompile>
+    <ClCompile Include="Nonlocal\tree_filter.cpp">
+      <Filter>Source Files\Nonlocal</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleFeatureMatching.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="StereoMethodForTracking.h">
+    <ClInclude Include="BoxFilterDepthRefine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FastDepthInterp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Nonlocal\ctmf.h">
+      <Filter>Source Files\Nonlocal</Filter>
+    </ClInclude>
+    <ClInclude Include="Nonlocal\CxImageFun.h">
+      <Filter>Source Files\Nonlocal</Filter>
+    </ClInclude>
+    <ClInclude Include="Nonlocal\mst_kruskals_image.h">
+      <Filter>Source Files\Nonlocal</Filter>
+    </ClInclude>
+    <ClInclude Include="Nonlocal\Nonlocal.h">
+      <Filter>Source Files\Nonlocal</Filter>
+    </ClInclude>
+    <ClInclude Include="Nonlocal\Nonlocal_basic.h">
+      <Filter>Source Files\Nonlocal</Filter>
+    </ClInclude>
+    <ClInclude Include="Nonlocal\tree_filter.h">
+      <Filter>Source Files\Nonlocal</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleFeatureMatching.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

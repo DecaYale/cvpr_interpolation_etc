@@ -1,11 +1,13 @@
-#include "Nonlocal\Nonlocal_basic.h"
-#include <windows.h>//The win32 API library
-using namespace NONLOCAL;
-namespace NONLOCAL{
-void timer::start()
+
+#include "qx_basic.h"
+
+#include <windows.h>//The win32 API library 
+/*timer*/
+
+void qx_timer::start()
 {
 	//m_begin=clock();
-
+	
     LARGE_INTEGER li;
     if(!QueryPerformanceFrequency(&li))
         cout << "QueryPerformanceFrequency failed!\n";
@@ -15,19 +17,19 @@ void timer::start()
     QueryPerformanceCounter(&li);
     m_counter_start = li.QuadPart;
 }
-double timer::stop()
+double qx_timer::stop()
 {
 	//m_end=clock(); return ( double(m_end-m_begin)/CLOCKS_PER_SEC );
     LARGE_INTEGER li;
     QueryPerformanceCounter(&li);
     return double(li.QuadPart-m_counter_start)/m_pc_frequency;
 }
-void timer::time_display(char *disp,int nr_frame){ printf("Running time (%s) is: %5.5f Seconds.\n",disp,stop()/nr_frame);}
-void timer::fps_display(char *disp,int nr_frame){ printf("Running time (%s) is: %5.5f frame per second.\n",disp,(double)nr_frame/stop());}
+void qx_timer::time_display(char *disp,int nr_frame){ printf("Running time (%s) is: %5.5f Seconds.\n",disp,stop()/nr_frame);}
+void qx_timer::fps_display(char *disp,int nr_frame){ printf("Running time (%s) is: %5.5f frame per second.\n",disp,(double)nr_frame/stop());}
 void boxcar_sliding_window_x(double *out,double *in,int h,int w,int radius)
 {
-    double scale = 1.0f / (2*radius+1);
-    for (int y = 0; y < h; y++) {
+    double scale = 1.0f / (2*radius+1);    
+    for (int y = 0; y < h; y++) {    
         double t;
         // do left edge
         t = in[y*w] * radius;
@@ -40,7 +42,7 @@ void boxcar_sliding_window_x(double *out,double *in,int h,int w,int radius)
             t += in[c+radius];
             t -= in[y*w];
             out[c] = t * scale;
-        }
+        }        
         // main loop
         for(int x = radius+1; x < w-radius; x++) {
             int c = y*w+x;
@@ -55,13 +57,14 @@ void boxcar_sliding_window_x(double *out,double *in,int h,int w,int radius)
             t -= in[c-radius-1];
             out[c] = t * scale;
         }
+        
     }
 }
 void boxcar_sliding_window_y(double *out,double *in,int h,int w,int radius)
 {
-    double scale = 1.0f / (2*radius+1);
-    for (int x = 0; x < w; x++)
-	{
+    double scale = 1.0f / (2*radius+1);    
+    for (int x = 0; x < w; x++) 
+	{    
         double t;
         // do left edge
         t = in[x] * radius;
@@ -74,7 +77,7 @@ void boxcar_sliding_window_y(double *out,double *in,int h,int w,int radius)
             t += in[c+radius*w];
             t -= in[x];
             out[c] = t * scale;
-        }
+        }        
         // main loop
         for(int y = radius+1; y < h-radius; y++) {
             int c = y*w+x;
@@ -88,7 +91,7 @@ void boxcar_sliding_window_y(double *out,double *in,int h,int w,int radius)
             t += in[(h-1)*w+x];
             t -= in[c-(radius*w)-w];
             out[c] = t * scale;
-        }
+        }        
     }
 }
 void boxcar_sliding_window(double **out,double **in,double **temp,int h,int w,int radius)
@@ -99,8 +102,8 @@ void boxcar_sliding_window(double **out,double **in,double **temp,int h,int w,in
 
 void boxcar_sliding_window_x(float *out,float *in,int h,int w,int radius)
 {
-    float scale = 1.0f / (2*radius+1);
-    for (int y = 0; y < h; y++) {
+    float scale = 1.0f / (2*radius+1);    
+    for (int y = 0; y < h; y++) {    
         float t;
         // do left edge
         t = in[y*w] * radius;
@@ -113,7 +116,7 @@ void boxcar_sliding_window_x(float *out,float *in,int h,int w,int radius)
             t += in[c+radius];
             t -= in[y*w];
             out[c] = t * scale;
-        }
+        }        
         // main loop
         for(int x = radius+1; x < w-radius; x++) {
             int c = y*w+x;
@@ -128,13 +131,14 @@ void boxcar_sliding_window_x(float *out,float *in,int h,int w,int radius)
             t -= in[c-radius-1];
             out[c] = t * scale;
         }
+        
     }
 }
 void boxcar_sliding_window_y(float *out,float *in,int h,int w,int radius)
 {
-    float scale = 1.0f / (2*radius+1);
-    for (int x = 0; x < w; x++)
-	{
+    float scale = 1.0f / (2*radius+1);    
+    for (int x = 0; x < w; x++) 
+	{    
         float t;
         // do left edge
         t = in[x] * radius;
@@ -147,7 +151,7 @@ void boxcar_sliding_window_y(float *out,float *in,int h,int w,int radius)
             t += in[c+radius*w];
             t -= in[x];
             out[c] = t * scale;
-        }
+        }        
         // main loop
         for(int y = radius+1; y < h-radius; y++) {
             int c = y*w+x;
@@ -186,8 +190,8 @@ void boxcar_sliding_window(float**out,float**in,float**temp,int h,int w,int radi
 }
 void boxcar_sliding_window_x(unsigned char*out,unsigned char*in,int h,int w,int radius)
 {
-    float scale = 1.0f / (2*radius+1);
-    for (int y = 0; y < h; y++) {
+    float scale = 1.0f / (2*radius+1);    
+    for (int y = 0; y < h; y++) {    
         float t;
         // do left edge
         t = in[y*w] * radius;
@@ -200,7 +204,7 @@ void boxcar_sliding_window_x(unsigned char*out,unsigned char*in,int h,int w,int 
             t += in[c+radius];
             t -= in[y*w];
             out[c] = unsigned char(t * scale+0.5);
-        }
+        }        
         // main loop
         for(int x = radius+1; x < w-radius; x++) {
             int c = y*w+x;
@@ -215,13 +219,14 @@ void boxcar_sliding_window_x(unsigned char*out,unsigned char*in,int h,int w,int 
             t -= in[c-radius-1];
             out[c] = unsigned char(t * scale+0.5);
         }
+        
     }
 }
 void boxcar_sliding_window_y(unsigned char*out,unsigned char*in,int h,int w,int radius)
 {
-    float scale = 1.0f / (2*radius+1);
-    for (int x = 0; x < w; x++)
-	{
+    float scale = 1.0f / (2*radius+1);    
+    for (int x = 0; x < w; x++) 
+	{    
         float t;
         // do left edge
         t = in[x] * radius;
@@ -234,7 +239,7 @@ void boxcar_sliding_window_y(unsigned char*out,unsigned char*in,int h,int w,int 
             t += in[c+radius*w];
             t -= in[x];
             out[c] = unsigned char(t * scale+0.5);
-        }
+        }        
         // main loop
         for(int y = radius+1; y < h-radius; y++) {
             int c = y*w+x;
@@ -278,12 +283,12 @@ void gaussian_recursive_x(double **od,double **id, int w, int h, double a0, doub
 	for(int y=0;y<h;y++)
 	{
 		xp = id[y][0]; yb = coefp*xp; yp = yb;
-		for (int x = 0; x < w; x++)
+		for (int x = 0; x < w; x++) 
 		{
 			double xc = id[y][x];
 			double yc = a0*xc + a1*xp - b1*yp - b2*yb;
 			od[y][x] = yc;
-			xp = xc; yb = yp; yp = yc;
+			xp = xc; yb = yp; yp = yc; 
 		}
 	}
     // reverse pass
@@ -316,9 +321,10 @@ void gaussian_recursive_y(double **od,double **id, int w, int h, double a0, doub
 			double xc = id[y][x];
 			double yc = a0*xc + a1*xp - b1*yp - b2*yb;
 			od[y][x] = yc;
-			xp = xc; yb = yp; yp = yc;
+			xp = xc; yb = yp; yp = yc; 
 		}
 	}
+
 
     // reverse pass
     // ensures response is symmetrical
@@ -328,7 +334,7 @@ void gaussian_recursive_y(double **od,double **id, int w, int h, double a0, doub
     double ya = 0.f;
 	for (int x = 0; x < w; x++)
 	{
-		xn = xa = id[h-1][x]; yn = coefn*xn; ya = yn;
+		xn = xa = id[h-1][x]; yn = coefn*xn; ya = yn;		
 		for(int y=h-1;y>=0;y--)
 		{
 			double xc = id[y][x];
@@ -397,12 +403,12 @@ void gaussian_recursive_x(float **od,float **id, int w, int h, float a0, float a
 	for(int y=0;y<h;y++)
 	{
 		xp = id[y][0]; yb = coefp*xp; yp = yb;
-		for (int x = 0; x < w; x++)
+		for (int x = 0; x < w; x++) 
 		{
 			float xc = id[y][x];
 			float yc = a0*xc + a1*xp - b1*yp - b2*yb;
 			od[y][x] = yc;
-			xp = xc; yb = yp; yp = yc;
+			xp = xc; yb = yp; yp = yc; 
 		}
 	}
 
@@ -437,9 +443,10 @@ void gaussian_recursive_y(float **od,float **id, int w, int h, float a0, float a
 			float xc = id[y][x];
 			float yc = a0*xc + a1*xp - b1*yp - b2*yb;
 			od[y][x] = yc;
-			xp = xc; yb = yp; yp = yc;
+			xp = xc; yb = yp; yp = yc; 
 		}
 	}
+
 
     // reverse pass
     // ensures response is symmetrical
@@ -449,7 +456,7 @@ void gaussian_recursive_y(float **od,float **id, int w, int h, float a0, float a
     float ya = 0.f;
 	for (int x = 0; x < w; x++)
 	{
-		xn = xa = id[h-1][x]; yn = coefn*xn; ya = yn;
+		xn = xa = id[h-1][x]; yn = coefn*xn; ya = yn;		
 		for(int y=h-1;y>=0;y--)
 		{
 			float xc = id[y][x];
@@ -508,10 +515,11 @@ int gaussian_recursive(float **image,float **temp,float sigma,int order,int h,in
 	//timer.fps_display();
 }
 
-void specular_free_image(unsigned char ***image_specular_free,unsigned char ***image_normalized,float **diffuse_chromaticity_max,int h,int w)
+
+void qx_specular_free_image(unsigned char ***image_specular_free,unsigned char ***image_normalized,float **diffuse_chromaticity_max,int h,int w)
 {
 	int y,x;
-	unsigned char *image_specular_free_x,*image_normalized_x; float *diffuse_chromaticity_max_x;
+	unsigned char *image_specular_free_x,*image_normalized_x; float *diffuse_chromaticity_max_x; 
 	unsigned char r,g,b; double imax,isum; float rf,gf,bf,c,t0,t1,t2,t3,diffuse,specular;
 	//*image_sum_x,*image_max_x,*chromaticity_max_x,
 	image_specular_free_x=image_specular_free[0][0];
@@ -521,7 +529,7 @@ void specular_free_image(unsigned char ***image_specular_free,unsigned char ***i
 	{
 		for(x=0;x<w;x++)
 		{
-			t1=3.f*(*diffuse_chromaticity_max_x++)-1.f;
+			t1=3.f*(*diffuse_chromaticity_max_x++)-1.f; 
 			t3=1.0f/3.0f;
 			r=(*image_normalized_x++);
 			g=(*image_normalized_x++);
@@ -536,7 +544,7 @@ void specular_free_image(unsigned char ***image_specular_free,unsigned char ***i
 					c=(float)(imax/isum);
 				}
 				t0=t1*c;
-				if(fabs(t0)<DEF_THRESHOLD_ZERO)
+				if(fabs(t0)<QX_DEF_THRESHOLD_ZERO)
 				{
 					*image_specular_free_x++=r;
 					*image_specular_free_x++=g;
@@ -568,8 +576,8 @@ void specular_free_image(unsigned char ***image_specular_free,unsigned char ***i
 	}
 }
 
-void stereo_flip_corr_vol(double***corr_vol_right,double***corr_vol,int h,int w,int nr_plane)
-{
+void qx_stereo_flip_corr_vol(double***corr_vol_right,double***corr_vol,int h,int w,int nr_plane)
+{	
 	for(int y=0;y<h;y++)
 	{
 		for(int x=0;x<w-nr_plane;x++) for(int d=0;d<nr_plane;d++) corr_vol_right[y][x][d]=corr_vol[y][x+d][d];
@@ -580,28 +588,26 @@ void stereo_flip_corr_vol(double***corr_vol_right,double***corr_vol,int h,int w,
 		}
 	}
 }
-
 void depth_best_cost(unsigned char**depth,double***evidence,int h,int w,int nr_planes)
 {
 	for(int y=0;y<h;y++) for(int x=0;x<w;x++) {int d; vec_min_pos(d,evidence[y][x],nr_planes); depth[y][x]=d;}
 }
-
 void vec_min_pos(int &min_pos,double *in,int len)
 {
 	double min_val=in[0];
 	min_pos=0;
 	for (int i=1;i<len;i++) if(in[i]<min_val)
 	{
-		min_val=in[i];
+		min_val=in[i];	
 		min_pos= i;
 	}
 }
-void detect_occlusion_left_right(unsigned char**mask_left,unsigned char**depth_left,unsigned char**depth_right,int h,int w,int nr_plane)
+void qx_detect_occlusion_left_right(unsigned char**mask_left,unsigned char**depth_left,unsigned char**depth_right,int h,int w,int nr_plane)
 {
 	memset(mask_left[0],0,sizeof(char)*h*w);
-	for(int y=0;y<h;y++)
+	for(int y=0;y<h;y++) 
 	{
-		for(int x=0;x<w;x++)
+		for(int x=0;x<w;x++) 
 		{
 			int d=depth_left[y][x];
 			int xr=x-d;
@@ -625,57 +631,20 @@ int file_open_ascii(char *file_path,int *out,int len)
 	fopen_s(&file_in,file_path,"r");
 	if(file_in!=NULL)
 	{
-		fseek(file_in,0,SEEK_SET);
+		fseek(file_in,0,SEEK_SET);	
 		for(i=0;i<len;i++ )
-		{
-			//fscanf(file_in,"%s",str);
-			fscanf_s(file_in,"%s",str,65);
+		{ 
+			//fscanf(file_in,"%s",str); 
+			fscanf_s(file_in,"%s",str,65); 
 			out[i]=atoi(str);
 		}
 		fclose(file_in);
 	}
 	else
 	{
-		printf("basic_file: Can not open file: %s\n",file_path);
+		printf("qx_basic_file: Can not open file: %s\n",file_path);
 		getchar();
 		exit(-1);
 	}
 	return(0);
-}
-
-void mf (unsigned char* corrupted, unsigned char* smooth, int width, int height)
-{
-	int p,q;
-	memcpy ( smooth, corrupted, width*height*sizeof(double) );
-
-	for (int j=1;j<height-1;j++)
-	{
-		for (int i=1;i<width-1;i++)
-		{
-			int k = 0;
-			unsigned char window[9];
-			for (int jj = j - 1; jj < j + 2; ++jj)
-				for (int ii = i - 1; ii < i + 2; ++ii)
-					window[k++] = corrupted[jj * width + ii];
-			//   Order elements (only half of them)
-			for (int m = 0; m < 5; ++m)
-			{
-				int min = m;
-				for (int n = m + 1; n < 9; ++n)
-					if (window[n] < window[min])
-						min = n;
-				//   Put found minimum element in its place
-				unsigned char temp = window[m];
-				window[m] = window[min];
-				window[min] = temp;
-			}
-			smooth[ j*width+i ] = window[4];
-			p=i;
-		}
-
-		q=j;
-	}//cout<<p<<endl;cout<<q<<endl;
-}
-
-
 }

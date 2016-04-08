@@ -152,6 +152,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BoxFilterDepthRefine.cpp" />
+    <ClCompile Include="Hebf\qx_basic.cpp" />
+    <ClCompile Include="Hebf\qx_hardware_efficient_bilateral_filter.cpp" />
+    <ClCompile Include="Hebf\qx_ppm.cpp" />
+    <ClCompile Include="LocalStereoMatching.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="FastDepthInterp.cpp" />
     <ClCompile Include="Nonlocal\ctmf.c" />
@@ -170,6 +174,10 @@
   <ItemGroup>
     <ClInclude Include="BoxFilterDepthRefine.h" />
     <ClInclude Include="FastDepthInterp.h" />
+    <ClInclude Include="Hebf\qx_basic.h" />
+    <ClInclude Include="Hebf\qx_hardware_efficient_bilateral_filter.h" />
+    <ClInclude Include="Hebf\qx_ppm.h" />
+    <ClInclude Include="LocalStereoMatching.h" />
     <ClInclude Include="Nonlocal\ctmf.h" />
     <ClInclude Include="Nonlocal\CxImageFun.h" />
     <ClInclude Include="Nonlocal\mst_kruskals_image.h" />

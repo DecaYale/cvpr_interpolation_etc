@@ -16,6 +16,9 @@
     <Filter Include="Source Files\Nonlocal">
       <UniqueIdentifier>{84bb8672-7d7d-4680-84bb-fe600ebcaf79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Hebf">
+      <UniqueIdentifier>{6f958d5e-f4a4-4da4-a295-b7a0a4c2b101}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -48,6 +51,18 @@
     <ClCompile Include="SimpleFeatureMatching.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LocalStereoMatching.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Hebf\qx_basic.cpp">
+      <Filter>Source Files\Hebf</Filter>
+    </ClCompile>
+    <ClCompile Include="Hebf\qx_hardware_efficient_bilateral_filter.cpp">
+      <Filter>Source Files\Hebf</Filter>
+    </ClCompile>
+    <ClCompile Include="Hebf\qx_ppm.cpp">
+      <Filter>Source Files\Hebf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoxFilterDepthRefine.h">
@@ -76,6 +91,18 @@
     </ClInclude>
     <ClInclude Include="SimpleFeatureMatching.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalStereoMatching.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hebf\qx_basic.h">
+      <Filter>Source Files\Hebf</Filter>
+    </ClInclude>
+    <ClInclude Include="Hebf\qx_hardware_efficient_bilateral_filter.h">
+      <Filter>Source Files\Hebf</Filter>
+    </ClInclude>
+    <ClInclude Include="Hebf\qx_ppm.h">
+      <Filter>Source Files\Hebf</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

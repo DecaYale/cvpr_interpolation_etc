@@ -6,6 +6,7 @@
 //#include <stdlib.h>
 //#include <crtdbg.h>
 using namespace cv;
+using namespace NONLOCAL;
 Nonlocal::Nonlocal()
 {
 	//m_buf_u2=NULL;
@@ -43,9 +44,11 @@ void Nonlocal::CostAggregation(bool refinement)
 {
 	//	if(!refinement)
 	//	{
+	clock_t timer = clock();
 	m_tf.build_tree(m_left[0][0]);
+	cout<<clock()-timer<<endl;
 	m_tf.filter(m_cost_vol[0][0],m_cost_vol_temp[0][0],m_nr_plane);
-
+	
 	//	depth_best_cost(m_disparity,m_cost_vol,m_h,m_w,m_nr_plane);
 
 	//ctmf(m_disparity[0],disparity[0],m_w,m_h,m_w,m_w,radius,1,m_h*m_w);

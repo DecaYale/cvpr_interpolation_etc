@@ -290,35 +290,35 @@ void CSimpleFeatureMatching:: sparseDisparity(const Mat & imgL,const Mat & imgR,
 
 
 	//for test
-	FILE * fp = fopen("pair.txt","w+");
+	/*FILE * fp = fopen("pair.txt","w+");
 	for(int i=0;i<pair.size();i++)
 	{
 		fprintf(fp,"%d %d %d %d\n",pair[i][0],pair[i][1],pair[i][2],pair[i][3]);
 
 	}
-	fclose(fp);
+	fclose(fp);*/
 
-	Mat imgC(imgL.rows,2*imgL.cols,imgL.type());
-	//imgC( Range(1,imgL.rows), Range(1,imgL.cols) ) = imgL;//.clone();
-	//imgC( Range(1,imgL.rows), Range(imgL.cols,2*imgL.cols) ) = imgR;//.clone();
-	for(int i=0;i<imgC.rows;i++)
-	{
-		for(int j=0;j<imgL.cols;j++)
-		{
-			imgC.at<uchar>(i,j) = imgL.at<uchar>(i,j);
-			imgC.at<uchar>(i,j+imgL.cols) = imgR.at<uchar>(i,j);
-		}
+	//Mat imgC(imgL.rows,2*imgL.cols,imgL.type());
+	////imgC( Range(1,imgL.rows), Range(1,imgL.cols) ) = imgL;//.clone();
+	////imgC( Range(1,imgL.rows), Range(imgL.cols,2*imgL.cols) ) = imgR;//.clone();
+	//for(int i=0;i<imgC.rows;i++)
+	//{
+	//	for(int j=0;j<imgL.cols;j++)
+	//	{
+	//		imgC.at<uchar>(i,j) = imgL.at<uchar>(i,j);
+	//		imgC.at<uchar>(i,j+imgL.cols) = imgR.at<uchar>(i,j);
+	//	}
 
-	}
-	int size = pair.size();
-	for(int i=0; i<pair.size();i++)
-	{
-		//srand(time(0))
-		circle(imgC,Point(pair[i][0],pair[i][1]),2,Scalar(0,0,0));
-		circle(imgC,Point(pair[i][2]+imgL.cols,pair[i][3]),2,Scalar(100,200,200));
-		line(imgC,Point(pair[i][0],pair[i][1]),Point(pair[i][2]+imgL.cols,pair[i][3]),Scalar(255,255,255));
+	//}
+	//int size = pair.size();
+	//for(int i=0; i<pair.size();i++)
+	//{
+	//	//srand(time(0))
+	//	circle(imgC,Point(pair[i][0],pair[i][1]),2,Scalar(0,0,0));
+	//	circle(imgC,Point(pair[i][2]+imgL.cols,pair[i][3]),2,Scalar(100,200,200));
+	//	line(imgC,Point(pair[i][0],pair[i][1]),Point(pair[i][2]+imgL.cols,pair[i][3]),Scalar(255,255,255));
 
-	}
+	//}
 	//imshow("1",imgC);
 	//waitKey(0);
 

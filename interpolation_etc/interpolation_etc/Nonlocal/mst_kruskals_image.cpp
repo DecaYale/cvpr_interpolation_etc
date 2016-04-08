@@ -1,6 +1,8 @@
 #include "Nonlocal\Nonlocal_basic.h"
 #include "mst_kruskals_image.h"
 
+using namespace NONLOCAL;
+
 inline int mst_yx_2_image_index(int y,int x,int h,int w){return(y*w+x);}
 inline int mst_compute_nr_edge_4neighbor(int h,int w){if(h<=2&&w<=2) return(0); else return((h-1)*w+(w-1)*h);}
 inline int mst_compute_nr_edge_8neighbor(int h,int w){if(h<=2&&w<=2) return(0); else return((h-1)*w+(w-1)*h+(h-1)*(w-1)*2);}

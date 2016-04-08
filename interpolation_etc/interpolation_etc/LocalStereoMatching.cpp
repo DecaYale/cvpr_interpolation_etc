@@ -1,7 +1,8 @@
-#include "BoxFilterDepthRefine.h"
+
+#include "LocalStereoMatching.h"
 #include "cxcore.h"
 using namespace cv;
-void CBoxFilterDepthRefine::offsetGenerate(const Mat& dispMap,Mat & offsetImg)
+void CLocalStereoMatching::offsetGenerate(const Mat& dispMap,Mat & offsetImg)
 {
 	int width = dispMap.cols;
 	int height = dispMap.rows;
@@ -15,7 +16,7 @@ void CBoxFilterDepthRefine::offsetGenerate(const Mat& dispMap,Mat & offsetImg)
 
 	}
 }
-void CBoxFilterDepthRefine::integralImgCal(double * originImg, int height,int width,int widthStep)
+void CLocalStereoMatching::integralImgCal(double * originImg, int height,int width,int widthStep)
 {
 	//first row
 	double rs = 0.0f;
@@ -40,7 +41,7 @@ void CBoxFilterDepthRefine::integralImgCal(double * originImg, int height,int wi
 
 
 }
-void CBoxFilterDepthRefine::boxFilterDepthRefine(const cv::Mat &coarseDepthMap,cv:: Mat & fineDepthMap)
+void CLocalStereoMatching::boxFilterDepthRefine(const cv::Mat &coarseDepthMap,cv:: Mat & fineDepthMap)
 {
 
 	int height = imgL->rows;
@@ -57,7 +58,7 @@ void CBoxFilterDepthRefine::boxFilterDepthRefine(const cv::Mat &coarseDepthMap,c
 	m_winCostCube = new Mat(3,size,CV_64FC1,Scalar(0) );
 	cv::Mat * offsetMap = new Mat(imgL->size(),CV_64FC1,Scalar(0));
 
-	offsetGenerate(coarseDepthMap, *offsetMap);
+	////offsetGenerate(coarseDepthMap, *offsetMap);
 	assert(imgL->channels() == 1);
 	//¼ÆËãraw cost
 	int range = 2*m_deviation+1;
@@ -92,7 +93,7 @@ void CBoxFilterDepthRefine::boxFilterDepthRefine(const cv::Mat &coarseDepthMap,c
 				if (d>=m_dLevels) continue;//d = min(d,m_dLevels-1);
 
 				m_dataCostCube->at<double>(d,i,j) = abs( 
-					imgL->at<uchar>(i,j) - imgR->at<uchar>(i,jr)
+					imgL->at<uchar>(i,j) - imgR->at<uchar>(i,jr)//imgL->at<uchar>(i,j) - imgR->at<uchar>(i,j-d)
 					);
 			}
 		}
@@ -134,6 +135,9 @@ void CBoxFilterDepthRefine::boxFilterDepthRefine(const cv::Mat &coarseDepthMap,c
 		}
 
 	}
+	//qx hebf
+
+
 	//WTA
 	for(int i=0;i<height; i++)
 	{
@@ -299,12 +303,12 @@ void CBoxFilterDepthRefine::boxFilterDepthRefine(const cv::Mat &coarseDepthMap,c
 
 }
 
-void CBoxFilterDepthRefine:: getDataCostCube(cv::Mat & data_cost_cube)
+void CLocalStereoMatching:: getDataCostCube(cv::Mat & data_cost_cube)
 {
 	 data_cost_cube = m_dataCostCube->clone();
 }
 
-void CBoxFilterDepthRefine:: getConfidenceMap(cv::Mat & confidence_map)
+void CLocalStereoMatching:: getConfidenceMap(cv::Mat & confidence_map)
 {
 	confidence_map = m_confidenceMap->clone();
 }

@@ -25,7 +25,7 @@ clock_t timer;
 #if 1
 int main()
 {
-	char root[] = "d:/MyDocument/klive sync/计算机视觉/Stereo_Matching/Data Set/Middlebury2006/half size/data";
+	char root[] = "e:/MyDocument/klive sync/计算机视觉/Stereo_Matching/Data Set/Middlebury2006/half size/data";
 	char dirL[100];
 	char dirR[100];
 	sprintf(dirL,"%s%d%s",root,2,"/view1.png");
@@ -116,7 +116,7 @@ for(int i =0;i<fineDepthMap.rows;i++)
 int main()
 {
 	//测试 Nonlocal + 原有的稀疏插稠密WTA
-	char root[] = "d:/MyDocument/klive sync/计算机视觉/Stereo_Matching/Data Set/Middlebury2006/half size/data";
+	char root[] = "e:/MyDocument/klive sync/计算机视觉/Stereo_Matching/Data Set/Middlebury2006/half size/data";
 	char dirL[100];
 	char dirR[100];
 	sprintf(dirL,"%s%d%s",root,2,"/view1.png");

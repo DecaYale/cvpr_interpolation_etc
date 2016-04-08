@@ -6,6 +6,7 @@
 ****************************************************************************************/
 #ifndef QX_HARDWARE_EFFICIENT_BILATERAL_FILTER_H
 #define QX_HARDWARE_EFFICIENT_BILATERAL_FILTER_H
+#include "qx_basic.h"
 
 class qx_hardware_efficient_bilateral_filter
 {

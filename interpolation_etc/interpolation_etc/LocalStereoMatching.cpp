@@ -1,6 +1,8 @@
 
 #include "LocalStereoMatching.h"
 #include "cxcore.h"
+#include "Hebf/qx_hardware_efficient_bilateral_filter.h"
+#include "Hebf/qx_basic.h"
 using namespace cv;
 void CLocalStereoMatching::offsetGenerate(const Mat& dispMap,Mat & offsetImg)
 {
@@ -83,8 +85,8 @@ void CLocalStereoMatching::boxFilterDepthRefine(const cv::Mat &coarseDepthMap,cv
 	{
 		for(int j=0; j<width; j++)
 		{
-			for(int d=offsetMap->at<double>(i,j);
-				d < offsetMap->at<double>(i,j)+ 2*m_deviation+1;
+			for(int d= 0;//offsetMap->at<double>(i,j);
+				d < m_dLevels;//offsetMap->at<double>(i,j)+ 2*m_deviation+1;
 				d++
 				)
 			{
@@ -100,43 +102,73 @@ void CLocalStereoMatching::boxFilterDepthRefine(const cv::Mat &coarseDepthMap,cv
 	}
 
 
-	//计算summed area 
-	 * m_dataCostCubeIntegral =  m_dataCostCube->clone(); 
-	Mat * costMap_d = new Mat(imgL->size(),CV_64FC1,Scalar(0));
-	for(int d=0; d<m_dLevels; d++)
+	////计算summed area 
+	// * m_dataCostCubeIntegral =  m_dataCostCube->clone(); 
+	//Mat * costMap_d = new Mat(imgL->size(),CV_64FC1,Scalar(0));
+	//for(int d=0; d<m_dLevels; d++)
+	//{
+	//	//if ( !dispSample.at(d) ) continue;///
+
+	//	double * costMap_d = (double*)(m_dataCostCubeIntegral->data + d*( m_dataCostCubeIntegral->step[0]) );
+	//	integralImgCal(costMap_d, height,width,m_dataCostCubeIntegral->step[1]);
+	//}
+
+
+
+	////计算winCostCube
+	//for(int d=0; d<m_dLevels; d++)
+	//{
+	//	//if (! dispSample.at(d)) continue;///
+
+	//	for(int i=0;i<height; i++)
+	//	{
+	//		for(int j=0; j<width; j++)
+	//		{
+	//			if (i-m_winWidth <0 || j-m_winWidth<0) continue;
+	//			
+	//			m_winCostCube->at<double>(d,i,j) = (
+	//				m_dataCostCubeIntegral->at<double>(d,i,j)
+	//				+m_dataCostCubeIntegral->at<double>(d,i-m_winWidth,j-m_winWidth)
+	//				-m_dataCostCubeIntegral->at<double>(d,i-m_winWidth,j)
+	//				-m_dataCostCubeIntegral->at<double>(d,i,j-m_winWidth)
+	//				); // /patchArea 取平均
+
+	//		}
+	//	}
+
+	//}
+	//qx hebf
+	for (int d =0; d<m_dLevels; d++)
 	{
-		//if ( !dispSample.at(d) ) continue;///
-
-		double * costMap_d = (double*)(m_dataCostCubeIntegral->data + d*( m_dataCostCubeIntegral->step[0]) );
-		integralImgCal(costMap_d, height,width,m_dataCostCubeIntegral->step[1]);
-	}
-
-
-
-	//计算winCostCube
-	for(int d=0; d<m_dLevels; d++)
-	{
-		//if (! dispSample.at(d)) continue;///
-
-		for(int i=0;i<height; i++)
+		unsigned char *** image,*** image_filtered;
+		//double ***image_filtered;
+		image_filtered = qx_allocu_3(height,width,3);
+		image = qx_allocu_3(height,width,3);
+//clock_t timer = clock();
+		for(int i=0; i<height; i++)
 		{
-			for(int j=0; j<width; j++)
+			for(int j=0;j<width; j++)
 			{
-				if (i-m_winWidth <0 || j-m_winWidth<0) continue;
-				
-				m_winCostCube->at<double>(d,i,j) = (
-					m_dataCostCubeIntegral->at<double>(d,i,j)
-					+m_dataCostCubeIntegral->at<double>(d,i-m_winWidth,j-m_winWidth)
-					-m_dataCostCubeIntegral->at<double>(d,i-m_winWidth,j)
-					-m_dataCostCubeIntegral->at<double>(d,i,j-m_winWidth)
-					); // /patchArea 取平均
+				image[i][j][0] = m_dataCostCube->at<double>(d,i,j);
+				image[i][j][1] = m_dataCostCube->at<double>(d,i,j);
+				image[i][j][2] = m_dataCostCube->at<double>(d,i,j);
+			}
+		}
+//cout<< clock()-timer<<endl;
+		int scale = 3;int sigma = 8; int radius=2;
+		qx_hardware_efficient_bilateral_filter m_hebf;
+		m_hebf.init(height,width,3,scale,sigma,radius);//initialization
+		m_hebf.filter(image_filtered,image,image);//bilateral filtering
 
+		for(int i=0; i<height; i++)
+		{
+			for(int j=0;j<width; j++)
+			{
+				m_winCostCube->at<double>(d,i,j) = image_filtered[i][j][1] ;
 			}
 		}
 
 	}
-	//qx hebf
-
 
 	//WTA
 	for(int i=0;i<height; i++)

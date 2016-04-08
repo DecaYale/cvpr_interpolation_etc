@@ -24,7 +24,7 @@ public:
 	CLocalStereoMatching();
 	CLocalStereoMatching(const cv::Mat & imgL,const cv::Mat & imgR,
 		int dLevels, int winWidth = 5,int deviation = 10, 
-		double validThreshold = 10, double curvThreshold = -1.5, double peakRatio = 1.2):
+		double validThreshold = 10, double curvThreshold = -0.1, double peakRatio = 1.1)://double validThreshold = 10, double curvThreshold = -1.5, double peakRatio = 1.2):
 	m_dLevels(dLevels),m_winWidth(winWidth),m_deviation(deviation),
 		m_validThreshold(validThreshold),m_curvThreshold(curvThreshold),m_peakRatio(peakRatio)
 	{

@@ -1,23 +1,27 @@
-﻿Build started 2016/4/8 21:21:56.
+﻿Build started 2016/4/18 11:18:41.
      1>Project "F:\GitHub\cvpr_interpolation_etc\interpolation_etc\interpolation_etc\interpolation_etc.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "x64\Release\interpolation_etc.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc100.pdb" /Gd /TP /errorReport:prompt LocalStereoMatching.cpp
-         LocalStereoMatching.cpp
-     1>f:\github\cvpr_interpolation_etc\interpolation_etc\interpolation_etc\hebf\qx_basic.h(67): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>f:\github\cvpr_interpolation_etc\interpolation_etc\interpolation_etc\hebf\qx_basic.h(68): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>f:\github\cvpr_interpolation_etc\interpolation_etc\interpolation_etc\hebf\qx_basic.h(70): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>LocalStereoMatching.cpp(15): warning C4244: 'initializing' : conversion from 'const double' to 'int', possible loss of data
-     1>LocalStereoMatching.cpp(152): warning C4244: '=' : conversion from 'double' to 'unsigned char', possible loss of data
-     1>LocalStereoMatching.cpp(153): warning C4244: '=' : conversion from 'double' to 'unsigned char', possible loss of data
-     1>LocalStereoMatching.cpp(154): warning C4244: '=' : conversion from 'double' to 'unsigned char', possible loss of data
-     1>LocalStereoMatching.cpp(266): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>LocalStereoMatching.cpp(267): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>LocalStereoMatching.cpp(271): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>LocalStereoMatching.cpp(276): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>LocalStereoMatching.cpp(281): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>LocalStereoMatching.cpp(282): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc100.pdb" /Gd /TP /errorReport:prompt main.cpp
+         main.cpp
+     1>D:\Program Files (x86)\opencv\build\include\opencv2/legacy/blobtrack.hpp(187): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string.h(105) : see declaration of 'strcpy'
+     1>D:\Program Files (x86)\opencv\build\include\opencv2/legacy/blobtrack.hpp(256): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string.h(110) : see declaration of 'strcat'
+     1>d:\program files (x86)\opencv\build\include\opencv2\flann\logger.h(66): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(234) : see declaration of 'fopen'
+     1>f:\github\cvpr_interpolation_etc\interpolation_etc\interpolation_etc\Nonlocal/Nonlocal_basic.h(79): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>f:\github\cvpr_interpolation_etc\interpolation_etc\interpolation_etc\Nonlocal/Nonlocal_basic.h(80): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>f:\github\cvpr_interpolation_etc\interpolation_etc\interpolation_etc\Nonlocal/Nonlocal_basic.h(82): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>main.cpp(35): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(371) : see declaration of 'sprintf'
+     1>main.cpp(36): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(371) : see declaration of 'sprintf'
+     1>main.cpp(39): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(371) : see declaration of 'sprintf'
+     1>main.cpp(40): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(371) : see declaration of 'sprintf'
          All outputs are up-to-date.
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"F:\GitHub\cvpr_interpolation_etc\interpolation_etc\x64\Release\interpolation_etc.exe" /INCREMENTAL:NO /NOLOGO opencv_calib3d2410.lib opencv_contrib2410.lib opencv_core2410.lib opencv_features2d2410.lib opencv_flann2410.lib opencv_gpu2410.lib opencv_highgui2410.lib opencv_imgproc2410.lib opencv_legacy2410.lib opencv_ml2410.lib opencv_objdetect2410.lib opencv_ts2410.lib opencv_video2410.lib opencv_calib3d2410.lib opencv_contrib2410.lib opencv_core2410.lib opencv_features2d2410.lib opencv_flann2410.lib opencv_gpu2410.lib opencv_highgui2410.lib opencv_imgproc2410.lib opencv_legacy2410.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"x64\Release\interpolation_etc.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"F:\GitHub\cvpr_interpolation_etc\interpolation_etc\x64\Release\interpolation_etc.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"F:\GitHub\cvpr_interpolation_etc\interpolation_etc\x64\Release\interpolation_etc.lib" /MACHINE:X64 x64\Release\BoxFilterDepthRefine.obj
@@ -45,4 +49,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.33
+Time Elapsed 00:00:03.57

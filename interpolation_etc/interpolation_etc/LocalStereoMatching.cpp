@@ -55,7 +55,7 @@ void CLocalStereoMatching::boxFilterDepthRefine(const cv::Mat &coarseDepthMap,cv
 	size[0] = m_dLevels; size[1] = height; size[2] = width;
 	double val = 1E5;	//大了会出问题，why？
 	m_dataCostCube = new Mat(3,size,CV_64FC1,Scalar(val) );
-	m_dataCostCubeIntegral = new Mat();//m_dataCostCubeIntegral = new Mat(3,size,CV_64FC1,Scalar(val) );
+	m_dataCostCubeIntegral = new Mat(3,size,CV_64FC1,Scalar(val) );//m_dataCostCubeIntegral = new Mat();//
 
 	m_winCostCube = new Mat(3,size,CV_64FC1,Scalar(0) );
 	cv::Mat * offsetMap = new Mat(imgL->size(),CV_64FC1,Scalar(0));
@@ -103,73 +103,79 @@ void CLocalStereoMatching::boxFilterDepthRefine(const cv::Mat &coarseDepthMap,cv
 
 
 	////计算summed area 
-	// * m_dataCostCubeIntegral =  m_dataCostCube->clone(); 
-	//Mat * costMap_d = new Mat(imgL->size(),CV_64FC1,Scalar(0));
-	//for(int d=0; d<m_dLevels; d++)
-	//{
-	//	//if ( !dispSample.at(d) ) continue;///
-
-	//	double * costMap_d = (double*)(m_dataCostCubeIntegral->data + d*( m_dataCostCubeIntegral->step[0]) );
-	//	integralImgCal(costMap_d, height,width,m_dataCostCubeIntegral->step[1]);
-	//}
-
-
-
-	////计算winCostCube
-	//for(int d=0; d<m_dLevels; d++)
-	//{
-	//	//if (! dispSample.at(d)) continue;///
-
-	//	for(int i=0;i<height; i++)
-	//	{
-	//		for(int j=0; j<width; j++)
-	//		{
-	//			if (i-m_winWidth <0 || j-m_winWidth<0) continue;
-	//			
-	//			m_winCostCube->at<double>(d,i,j) = (
-	//				m_dataCostCubeIntegral->at<double>(d,i,j)
-	//				+m_dataCostCubeIntegral->at<double>(d,i-m_winWidth,j-m_winWidth)
-	//				-m_dataCostCubeIntegral->at<double>(d,i-m_winWidth,j)
-	//				-m_dataCostCubeIntegral->at<double>(d,i,j-m_winWidth)
-	//				); // /patchArea 取平均
-
-	//		}
-	//	}
-
-	//}
-	//qx hebf
-	for (int d =0; d<m_dLevels; d++)
+	 * m_dataCostCubeIntegral =  m_dataCostCube->clone(); 
+	Mat * costMap_d = new Mat(imgL->size(),CV_64FC1,Scalar(0));
+	for(int d=0; d<m_dLevels; d++)
 	{
-		unsigned char *** image,*** image_filtered;
-		//double ***image_filtered;
-		image_filtered = qx_allocu_3(height,width,3);
-		image = qx_allocu_3(height,width,3);
-//clock_t timer = clock();
-		for(int i=0; i<height; i++)
-		{
-			for(int j=0;j<width; j++)
-			{
-				image[i][j][0] = m_dataCostCube->at<double>(d,i,j);
-				image[i][j][1] = m_dataCostCube->at<double>(d,i,j);
-				image[i][j][2] = m_dataCostCube->at<double>(d,i,j);
-			}
-		}
-//cout<< clock()-timer<<endl;
-		int scale = 3;int sigma = 8; int radius=2;
-		qx_hardware_efficient_bilateral_filter m_hebf;
-		m_hebf.init(height,width,3,scale,sigma,radius);//initialization
-		m_hebf.filter(image_filtered,image,image);//bilateral filtering
+		//if ( !dispSample.at(d) ) continue;///
 
-		for(int i=0; i<height; i++)
+		double * costMap_d = (double*)(m_dataCostCubeIntegral->data + d*( m_dataCostCubeIntegral->step[0]) );
+		integralImgCal(costMap_d, height,width,m_dataCostCubeIntegral->step[1]);
+	}
+
+
+
+	//计算winCostCube
+	for(int d=0; d<m_dLevels; d++)
+	{
+		//if (! dispSample.at(d)) continue;///
+
+		for(int i=0;i<height; i++)
 		{
-			for(int j=0;j<width; j++)
+			for(int j=0; j<width; j++)
 			{
-				m_winCostCube->at<double>(d,i,j) = image_filtered[i][j][1] ;
+				if (i-m_winWidth <0 || j-m_winWidth<0) continue;
+				
+				m_winCostCube->at<double>(d,i,j) = (
+					m_dataCostCubeIntegral->at<double>(d,i,j)
+					+m_dataCostCubeIntegral->at<double>(d,i-m_winWidth,j-m_winWidth)
+					-m_dataCostCubeIntegral->at<double>(d,i-m_winWidth,j)
+					-m_dataCostCubeIntegral->at<double>(d,i,j-m_winWidth)
+					); // /patchArea 取平均
+
 			}
 		}
 
 	}
-
+//	//qx hebf
+//	for (int d =0; d<m_dLevels; d++)
+//	{
+//		unsigned char *** image,***texture,*** image_filtered;
+//		//double ***image_filtered;
+//		image_filtered = qx_allocu_3(height,width,3);
+//		image = qx_allocu_3(height,width,3);
+//		texture = qx_allocu_3(height,width,3);
+////clock_t timer = clock();
+//		for(int i=0; i<height; i++)
+//		{
+//			for(int j=0;j<width; j++)
+//			{
+//				image[i][j][0] = m_dataCostCube->at<double>(d,i,j);
+//				image[i][j][1] = m_dataCostCube->at<double>(d,i,j);
+//				image[i][j][2] = m_dataCostCube->at<double>(d,i,j);
+//
+//				texture[i][j][0] = imgL->at<uchar>(i,j);
+//				texture[i][j][1] = texture[i][j][0];
+//				texture[i][j][2] = texture[i][j][0];
+//					
+//			}
+//		}
+////cout<< clock()-timer<<endl;
+//		int scale = 3;int sigma = 10; int radius=2;
+//		qx_hardware_efficient_bilateral_filter m_hebf;
+//		m_hebf.init(height,width,3,scale,sigma,radius);//initialization
+//		m_hebf.filter(image_filtered,image,texture);//m_hebf.filter(image_filtered,image,image);//bilateral filtering
+//
+//		for(int i=0; i<height; i++)
+//		{
+//			for(int j=0;j<width; j++)
+//			{
+//				m_winCostCube->at<double>(d,i,j) = image_filtered[i][j][0] ;
+//			}
+//		}
+//
+//	}
+//
 	//WTA
 	for(int i=0;i<height; i++)
 	{
